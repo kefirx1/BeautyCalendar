@@ -1,17 +1,20 @@
 package pl.dev.beautycalendar
 
-import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
-import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
+
+
+
+    companion object{
+        var userName: String = ""
+    }
 
 
     private lateinit var binding: ActivityMainBinding
@@ -25,6 +28,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUserName()
+
+
 
 //        binding.sendMessageButton.setOnClickListener {
 //
@@ -39,9 +45,13 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
+    }
 
 
 
+    private fun setUserName(){
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
     }
 
 
