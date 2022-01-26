@@ -8,6 +8,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.EventDay
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -55,6 +59,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
+
+
+
 //        binding.sendMessageButton.setOnClickListener {
 //
 //            if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
@@ -77,12 +85,24 @@ class MainActivity : AppCompatActivity() {
         setViewPager()
         setCalendar()
 
+
+
+
     }
 
 
     private fun setListeners(){
         binding.newVisitButton.setOnClickListener{
             Log.e("TAG", "New visit")
+            val database = FirebaseDatabase.getInstance()
+
+            val reference = database.getReference("monika")
+
+
+            reference.child(customerInfo.date.toString()).setValue(customerInfo)
+
+
+            Toast.makeText(applicationContext, "Dupa", Toast.LENGTH_SHORT).show()
         }
 
         binding.otherLinearLayout.setOnClickListener{
