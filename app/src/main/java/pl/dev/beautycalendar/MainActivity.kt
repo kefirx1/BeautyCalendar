@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.SmsManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUserName()
-
+        setListeners()
 
 
 //        binding.sendMessageButton.setOnClickListener {
@@ -47,6 +48,34 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    override fun onResume() {
+        super.onResume()
+
+        setViewPager()
+        setCalendar()
+
+    }
+
+
+    private fun setListeners(){
+        binding.newVisitButton.setOnClickListener{
+            Log.e("TAG", "New visit")
+        }
+
+        binding.otherLinearLayout.setOnClickListener{
+            Log.e("TAG", "Other")
+        }
+    }
+
+
+    private fun setViewPager(){
+
+    }
+
+    private fun setCalendar(){
+
+    }
 
 
     private fun setUserName(){
