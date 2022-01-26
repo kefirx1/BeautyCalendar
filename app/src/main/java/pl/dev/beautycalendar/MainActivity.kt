@@ -7,30 +7,52 @@ import android.telephony.SmsManager
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.applandeo.materialcalendarview.EventDay
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
 
 
     companion object{
-        var userName: String = ""
+        var userName = ""
+        val customerInfo = CustomerInfo("Jan", "Kowalski", "123456789", "Paznokcie",1643316694000)
+        val customerInfo2 = CustomerInfo("Jan", "Kowalski", "123456789", "Paznokcie",1643403094000)
+
+        val customersList: ArrayList<CustomerInfo> = ArrayList()
+
+
+        val customersToViewList: ArrayList<CustomerInfo> = ArrayList()
+        val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
+        val events: MutableList<EventDay> = ArrayList()
     }
 
 
     private lateinit var binding: ActivityMainBinding
 
-
     val phoneNumber = "+48605386566"
     val textMessage = "Test"
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUserName()
         setListeners()
+
+
+        customersList.add(customerInfo)
+        customersList.add(customerInfo2)
+
+
 
 
 //        binding.sendMessageButton.setOnClickListener {
@@ -73,7 +95,46 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+
+
+
     private fun setCalendar(){
+
+        val calendar = Calendar.getInstance()
+
+        customersList.forEach{
+            customersToViewList.add(it)
+            val dateOfVisitMillis = it.date
+            val dateOfVisitSec = dateOfVisitMillis / 1000
+            val dateOfVisit = LocalDateTime.ofEpochSecond(
+                dateOfVisitSec, 0,
+                ZoneOffset.UTC
+            )
+
+            var hour = dateOfVisit.hour + 1
+
+            if (dateOfVisit.monthValue == 3 && dateOfVisit.dayOfMonth >= 27) {
+                hour++
+            } else if (dateOfVisit.monthValue in 4..8) {
+                hour++
+            }
+
+            calendar.set(
+                dateOfVisit.year,
+                dateOfVisit.monthValue - 1,
+                dateOfVisit.dayOfMonth,
+                hour,
+                dateOfVisit.minute,
+                dateOfVisit.second
+            )
+            val event = EventDay(calendar.clone() as Calendar, R.drawable.ic_baseline_add_24)
+            events.add(event)
+            customerToEvent[event] = it
+        }
+
+        binding.calendarView.setEvents(events)
 
     }
 
