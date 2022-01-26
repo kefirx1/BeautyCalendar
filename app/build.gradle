@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 android {
@@ -35,6 +38,19 @@ android {
 }
 
 dependencies {
+
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    //Calendar
+    implementation 'com.applandeo:material-calendar-view:1.7.0'
+    implementation 'me.relex:circleindicator:2.1.4'
+
+
+    //Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
