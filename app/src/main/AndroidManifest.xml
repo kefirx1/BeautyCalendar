@@ -13,9 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
+            android:name=".OldCustomerActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor">
+        </activity>
+        <activity
+            android:name=".NewCustomerActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"/>
+        <activity
             android:name=".LoginActivity"
-            android:screenOrientation="nosensor"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

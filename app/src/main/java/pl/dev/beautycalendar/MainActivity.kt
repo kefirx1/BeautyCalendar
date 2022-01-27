@@ -5,13 +5,10 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.EventDay
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -49,9 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setUserName()
         setListeners()
-
 
         customersList.add(customerInfo)
         customersList.add(customerInfo2)
@@ -82,6 +79,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+
         setViewPager()
         setCalendar()
 
@@ -94,15 +92,25 @@ class MainActivity : AppCompatActivity() {
     private fun setListeners(){
         binding.newVisitButton.setOnClickListener{
             Log.e("TAG", "New visit")
-            val database = FirebaseDatabase.getInstance()
+            binding.newVisitModal.visibility = View.VISIBLE
 
-            val reference = database.getReference("monika")
+            binding.newVisitModalBackButton.setOnClickListener{
+                binding.newVisitModal.visibility = View.GONE
+            }
+
+            binding.newCustomerButton.setOnClickListener{
+                Log.e("TAG", "New customer")
+                val intent = Intent(this, NewCustomerActivity::class.java)
+                startActivity(intent)
+            }
+
+            binding.oldCustomerButton.setOnClickListener{
+                Log.e("TAG", "Old customer")
+                val intent = Intent(this, OldCustomerActivity::class.java)
+                startActivity(intent)
+            }
 
 
-            reference.child(customerInfo.date.toString()).setValue(customerInfo)
-
-
-            Toast.makeText(applicationContext, "Dupa", Toast.LENGTH_SHORT).show()
         }
 
         binding.otherLinearLayout.setOnClickListener{
@@ -115,6 +123,17 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+//    val database = FirebaseDatabase.getInstance()
+//
+//    val reference = database.getReference(userName)
+//
+//
+//    reference.child(customerInfo.date.toString()).setValue(customerInfo)
+//
+//
+//    Toast.makeText(applicationContext, "Dupa", Toast.LENGTH_SHORT).show()
 
 
 

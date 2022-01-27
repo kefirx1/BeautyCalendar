@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="fuchsia">#CF135E</color>
     <color name="darkGray">#252123</color>
+    <color name="darkGray2">#302B2D</color>
+
 </resources>

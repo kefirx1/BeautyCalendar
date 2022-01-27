@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewCustomerActivity">
+
+    <LinearLayout
+        android:id="@+id/topLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <TextView
+            android:labelFor="@id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/fuchsia"
+            android:letterSpacing="0.2"
+            android:text="IMIĘ"/>
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/darkGray2"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:labelFor="@id/surnameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/fuchsia"
+            android:letterSpacing="0.2"
+            android:text="NAZWISKO"/>
+
+        <EditText
+            android:id="@+id/surnameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/darkGray2"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:labelFor="@id/telephoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/fuchsia"
+            android:letterSpacing="0.2"
+            android:text="NUMER"/>
+
+        <EditText
+            android:id="@+id/telephoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/darkGray2"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:labelFor="@id/serviceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/fuchsia"
+            android:letterSpacing="0.2"
+            android:text="USŁUGA"/>
+
+        <EditText
+            android:id="@+id/serviceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/darkGray2"
+            android:ems="10"
+            android:inputType="text"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:labelFor="@id/newCustomerDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/fuchsia"
+            android:letterSpacing="0.2"
+            android:text="DATA"/>
+
+        <DatePicker
+            android:id="@+id/newCustomerDatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:scaleY="0.9"
+            android:layout_marginTop="-40dp"/>
+
+        <TextView
+            android:layout_marginTop="-25dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/darkGray"/>
+
+
+        <TimePicker
+            android:id="@+id/newCustomerTimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"
+            android:layout_marginTop="-20dp">
+        </TimePicker>
+
+        <Button
+            android:id="@+id/addNewCustomerButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-15dp"
+            android:text="DODAJ"
+            android:textColor="@color/fuchsia"
+            android:textSize="30sp" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
