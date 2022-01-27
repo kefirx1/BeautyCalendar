@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         var userName = ""
-        val customerInfo = CustomerInfo("Jan", "Kowalski", "123456789", "Paznokcie",1643316694000)
-        val customerInfo2 = CustomerInfo("Jan", "Kowalski", "123456789", "Paznokcie",1643403094000)
+        val customerInfo = CustomerInfo(1643316694000,"Jan", "Kowalski", "123456789", "Paznokcie")
+
 
         val customersList: ArrayList<CustomerInfo> = ArrayList()
 
@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         setListeners()
 
         customersList.add(customerInfo)
-        customersList.add(customerInfo2)
 
 
 
@@ -108,6 +107,7 @@ class MainActivity : AppCompatActivity() {
             binding.oldCustomerButton.setOnClickListener{
                 Log.e("TAG", "Old customer")
                 val intent = Intent(this, OldCustomerActivity::class.java)
+                resetModals()
                 startActivity(intent)
             }
 

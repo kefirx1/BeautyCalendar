@@ -1,9 +1,9 @@
 package pl.dev.beautycalendar
 
 data class CustomerInfo(
-    val name: String,
+    var date: Long,
+    var service: String,
     val surname: String,
-    val telephone: String,
-    val service: String,
-    val date: Long
+    val name: String,
+    val telephone: String
 )

@@ -35,7 +35,7 @@ class NewCustomerActivity : AppCompatActivity() {
             val service = binding.serviceEditText.text.toString()
             val dateOfVisit = getDateOfVisitMillis()
 
-            newCustomer = CustomerInfo(name, surname, telephone, service, dateOfVisit)
+            newCustomer = CustomerInfo(dateOfVisit, service, surname, name, telephone)
 
             addNewVisit(newCustomer)
 
