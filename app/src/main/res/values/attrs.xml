@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="whiteButtonBackground" format="reference" />
+    <attr name="modalBackground" format="reference" />
+    <attr name="spinnerBackground" format="reference" />
+    <attr name="inputBackground" format="reference" />
+    <attr name="settingsOption" format="reference" />
+    <attr name="sectionBackground" format="reference" />
+</resources>

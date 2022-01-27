@@ -10,5 +10,7 @@
     <color name="fuchsia">#CF135E</color>
     <color name="darkGray">#252123</color>
     <color name="darkGray2">#302B2D</color>
+    <color name="gray">#888888</color>
+    <color name="primary">#CF135E</color>
 
 </resources>

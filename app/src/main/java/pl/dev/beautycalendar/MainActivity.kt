@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
             binding.newCustomerButton.setOnClickListener{
                 Log.e("TAG", "New customer")
                 val intent = Intent(this, NewCustomerActivity::class.java)
+                resetModals()
                 startActivity(intent)
             }
 
@@ -118,24 +119,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun resetModals() {
+        binding.newVisitModal.visibility = View.GONE
+    }
+
 
     private fun setViewPager(){
 
     }
-
-
-
-//    val database = FirebaseDatabase.getInstance()
-//
-//    val reference = database.getReference(userName)
-//
-//
-//    reference.child(customerInfo.date.toString()).setValue(customerInfo)
-//
-//
-//    Toast.makeText(applicationContext, "Dupa", Toast.LENGTH_SHORT).show()
-
-
 
 
 
