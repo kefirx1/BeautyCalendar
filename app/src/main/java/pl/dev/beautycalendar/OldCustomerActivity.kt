@@ -67,9 +67,6 @@ class OldCustomerActivity : AppCompatActivity() {
     private fun setView() {
         binding.oldCustomerTimePicker.setIs24HourView(true)
 
-
-
-
         binding.addOldCustomerButton.setOnClickListener{
 
             val customerName = binding.customerSpinner.selectedItem.toString()
@@ -105,7 +102,6 @@ class OldCustomerActivity : AppCompatActivity() {
         phoneNumber = "+48" + customer.telephone
         textMessage = makeMessage.getMessage(customer)
 
-        println(textMessage)
 
 
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
