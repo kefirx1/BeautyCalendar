@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         var userName = ""
-        val customerInfo = CustomerInfo(1643316694000,"Jan", "Kowalski", "123456789", "Paznokcie")
 
 
         val customersList: ArrayList<CustomerInfo> = ArrayList()
@@ -50,27 +49,6 @@ class MainActivity : AppCompatActivity() {
         setUserName()
         setListeners()
 
-        customersList.add(customerInfo)
-
-
-
-
-
-
-
-
-//        binding.sendMessageButton.setOnClickListener {
-//
-//            if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
-//                sendMessage()
-//            }else {
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(android.Manifest.permission.SEND_SMS),
-//                    100
-//                )
-//            }
-//        }
 
     }
 
@@ -116,6 +94,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.otherLinearLayout.setOnClickListener{
             Log.e("TAG", "Other")
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -174,32 +154,5 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-
-
-
-
-
-
-
-    private fun sendMessage(){
-        val smsManager = SmsManager.getDefault()
-        smsManager.sendTextMessage(phoneNumber, null, textMessage, null, null)
-
-        Toast.makeText(applicationContext, "Wysłano!!", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if(requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            sendMessage()
-        }else{
-            Toast.makeText(applicationContext, "Nie zezwolno na wysyłanie sms", Toast.LENGTH_SHORT).show()
-        }
-    }
 
 }

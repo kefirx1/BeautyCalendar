@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
-import pl.dev.beautycalendar.MainActivity.Companion.customerInfo
 import pl.dev.beautycalendar.MainActivity.Companion.userName
 import pl.dev.beautycalendar.databinding.ActivityNewCustomerBinding
 import java.util.*
@@ -35,10 +34,12 @@ class NewCustomerActivity : AppCompatActivity() {
             val service = binding.serviceEditText.text.toString()
             val dateOfVisit = getDateOfVisitMillis()
 
-            newCustomer = CustomerInfo(dateOfVisit, service, surname, name, telephone)
-
-            addNewVisit(newCustomer)
-
+            if(name.isNotBlank() && surname.isNotBlank() && telephone.isNotBlank() && service.isNotBlank()){
+                newCustomer = CustomerInfo(dateOfVisit, name, service, surname, telephone)
+                addNewVisit(newCustomer)
+            }else{
+                Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
