@@ -1,14 +1,12 @@
 package pl.dev.beautycalendar
 
-import java.lang.StringBuilder
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
 
 class MakeMessage {
 
-    private val BASIC_MESSAGE1 = "Dzien dobry Salon Kosmetyczny M&A  Monika I Agata przypominaja o najblizszej wizycie "
+    private val basicMessage = "Dzien dobry Salon Kosmetyczny M&A  Monika I Agata przypominaja o najblizszej wizycie "
 
     fun getMessage(customerInfo: CustomerInfo): String{
 
@@ -16,7 +14,7 @@ class MakeMessage {
 
         val stringDate = getStringDate(dateTimeOfVisitMillis)
 
-        return BASIC_MESSAGE1 + stringDate
+        return basicMessage + stringDate
     }
 
     private fun getStringDate(dateTimeOfVisitMillis: Long): String{
@@ -25,7 +23,11 @@ class MakeMessage {
         val month = dateTimeOfVisit.monthValue
         val day = dateTimeOfVisit.dayOfMonth
         val hour = dateTimeOfVisit.hour
-        val minute = dateTimeOfVisit.minute
+        var minute = dateTimeOfVisit.minute.toString()
+
+        if(dateTimeOfVisit.minute<10){
+            minute = "0$minute"
+        }
 
         return "$day.$month.$year $hour:$minute"
 
