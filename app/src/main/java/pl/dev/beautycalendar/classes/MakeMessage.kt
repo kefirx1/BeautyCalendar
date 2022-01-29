@@ -1,5 +1,6 @@
-package pl.dev.beautycalendar
+package pl.dev.beautycalendar.classes
 
+import pl.dev.beautycalendar.data.CustomerInfo
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

@@ -1,4 +1,4 @@
-package pl.dev.beautycalendar
+package pl.dev.beautycalendar.data
 
 data class CustomerInfo(
     var date: Long,

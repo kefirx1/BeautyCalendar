@@ -1,10 +1,9 @@
-package pl.dev.beautycalendar
+package pl.dev.beautycalendar.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.SmsManager
-import android.widget.Toast
 
 class MessageReceiver: BroadcastReceiver() {
 

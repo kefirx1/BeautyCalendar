@@ -1,14 +1,12 @@
 package pl.dev.beautycalendar
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.telephony.SmsManager
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.EventDay
+import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 import java.time.ZoneOffset

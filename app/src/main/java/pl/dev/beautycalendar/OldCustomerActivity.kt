@@ -1,13 +1,8 @@
 package pl.dev.beautycalendar
 
 import android.R.layout
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.telephony.SmsManager
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -15,14 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.database.*
-import pl.dev.beautycalendar.MessageReceiver.Companion.MESSAGE_EXTRA
-import pl.dev.beautycalendar.MessageReceiver.Companion.PHONE_EXTRA
+import pl.dev.beautycalendar.classes.MakeMessage
+import pl.dev.beautycalendar.classes.ScheduleMessage
+import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityOldCustomerBinding
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
-import kotlin.time.Duration.Companion.days
 
 class OldCustomerActivity : AppCompatActivity() {
 
@@ -31,6 +23,7 @@ class OldCustomerActivity : AppCompatActivity() {
     private lateinit var reference: DatabaseReference
     private lateinit var listOfCustomers: ArrayList<CustomerInfo>
     private lateinit var makeMessage: MakeMessage
+    private lateinit var scheduleMessage: ScheduleMessage
 
 
     private var phoneNumber = ""
@@ -45,6 +38,7 @@ class OldCustomerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         makeMessage = MakeMessage()
+        scheduleMessage = ScheduleMessage()
 
         database = FirebaseDatabase.getInstance()
         reference = database.getReference(MainActivity.userName)
@@ -125,7 +119,7 @@ class OldCustomerActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
 
-            scheduleMessage()
+            scheduleMessage.setScheduleMessage(applicationContext, this, textMessage, phoneNumber, messageId, dateTimeOfVisitMill)
 
         } else {
             ActivityCompat.requestPermissions(
@@ -138,46 +132,7 @@ class OldCustomerActivity : AppCompatActivity() {
         this.finish()
     }
 
-    private fun scheduleMessage() {
-        val intent = Intent(this, MessageReceiver::class.java).apply {
-            putExtra(MESSAGE_EXTRA, textMessage)
-            putExtra(PHONE_EXTRA, phoneNumber)
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            messageId,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val dayBeforeVisitMillis = getDayBefore()
-
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            dayBeforeVisitMillis,
-            pendingIntent
-        )
-    }
-
-    private fun getDayBefore(): Long {
-        val dateTimeOfVisit = LocalDateTime.ofInstant(
-            Instant.ofEpochMilli(dateTimeOfVisitMill),
-            ZoneId.systemDefault()
-        )
-
-        val calendar = Calendar.getInstance()
-
-        calendar.set(
-            dateTimeOfVisit.year,
-            dateTimeOfVisit.monthValue - 1,
-            dateTimeOfVisit.dayOfMonth - 1,
-            15,
-            0,
-            0
-        )
-        return calendar.timeInMillis
-    }
 
 
     override fun onRequestPermissionsResult(
@@ -188,7 +143,7 @@ class OldCustomerActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            scheduleMessage()
+            scheduleMessage.setScheduleMessage(applicationContext, this, textMessage, phoneNumber, messageId, dateTimeOfVisitMill)
         } else {
             Toast.makeText(applicationContext, "Nie zezwolno na wysyłanie sms", Toast.LENGTH_SHORT)
                 .show()
