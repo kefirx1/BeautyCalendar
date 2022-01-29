@@ -26,5 +26,5 @@ class MessageReceiver: BroadcastReceiver() {
         val smsManager = SmsManager.getDefault()
         smsManager.sendTextMessage(phoneNumber, null, textMessage, null, null)
     }
-    
+
 }
