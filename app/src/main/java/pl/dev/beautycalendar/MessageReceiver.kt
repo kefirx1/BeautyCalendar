@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.SmsManager
+import android.widget.Toast
 
 class MessageReceiver: BroadcastReceiver() {
 
@@ -21,12 +22,9 @@ class MessageReceiver: BroadcastReceiver() {
 
     }
 
-    private fun sendMessage(phoneNumber: String, textMessage: String){
+    private fun sendMessage(phoneNumber: String, textMessage: String) {
         val smsManager = SmsManager.getDefault()
         smsManager.sendTextMessage(phoneNumber, null, textMessage, null, null)
     }
-
-
-
-
+    
 }

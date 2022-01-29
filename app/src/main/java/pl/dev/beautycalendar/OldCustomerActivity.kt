@@ -1,6 +1,10 @@
 package pl.dev.beautycalendar
 
 import android.R.layout
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.telephony.SmsManager
@@ -11,8 +15,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.database.*
+import pl.dev.beautycalendar.MessageReceiver.Companion.MESSAGE_EXTRA
+import pl.dev.beautycalendar.MessageReceiver.Companion.PHONE_EXTRA
 import pl.dev.beautycalendar.databinding.ActivityOldCustomerBinding
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
+import kotlin.time.Duration.Companion.days
 
 class OldCustomerActivity : AppCompatActivity() {
 
@@ -25,6 +35,8 @@ class OldCustomerActivity : AppCompatActivity() {
 
     private var phoneNumber = ""
     private var textMessage = ""
+    private var dateTimeOfVisitMill = 0L
+    private var messageId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,21 +49,28 @@ class OldCustomerActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
         reference = database.getReference(MainActivity.userName)
 
-        reference.addValueEventListener(object: ValueEventListener {
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listOfCustomers = ArrayList()
                 val singleCustomerInfoList: ArrayList<String> = ArrayList()
 
-                snapshot.children.forEach{ customer ->
-                    customer.children.forEach{
+                snapshot.children.forEach { customer ->
+                    customer.children.forEach {
                         singleCustomerInfoList.add(it.value.toString())
                     }
-                    val singleCustomer = CustomerInfo(singleCustomerInfoList[0].toLong(), singleCustomerInfoList[1], singleCustomerInfoList[2], singleCustomerInfoList[3], singleCustomerInfoList[4])
+                    val singleCustomer = CustomerInfo(
+                        singleCustomerInfoList[0].toLong(),
+                        singleCustomerInfoList[1],
+                        singleCustomerInfoList[2],
+                        singleCustomerInfoList[3],
+                        singleCustomerInfoList[4]
+                    )
                     listOfCustomers.add(singleCustomer)
                     singleCustomerInfoList.clear()
                 }
                 setSpinnerInfo()
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Log.w("TAG", "Failed to read value.", error.toException())
             }
@@ -65,7 +84,7 @@ class OldCustomerActivity : AppCompatActivity() {
     private fun setView() {
         binding.oldCustomerTimePicker.setIs24HourView(true)
 
-        binding.addOldCustomerButton.setOnClickListener{
+        binding.addOldCustomerButton.setOnClickListener {
 
             val customerName = binding.customerSpinner.selectedItem.toString()
             val service = binding.serviceEditText.text.toString()
@@ -73,9 +92,9 @@ class OldCustomerActivity : AppCompatActivity() {
 
             val customerId = getCustomerId(customerName)
 
-            if(customerName.isNotBlank() && service.isNotBlank() && customerId.isNotBlank()){
+            if (customerName.isNotBlank() && service.isNotBlank() && customerId.isNotBlank()) {
                 addNewVisit(getCustomer(customerId, service, dateOfVisit))
-            }else{
+            } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
             }
 
@@ -89,39 +108,77 @@ class OldCustomerActivity : AppCompatActivity() {
         return customerName.substring(0, indexOfFirstSpace)
     }
 
-    private fun addNewVisit(customer: CustomerInfo){
+    private fun addNewVisit(customer: CustomerInfo) {
 
         reference.child(customer.telephone).setValue(customer)
 
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
 
-
-
         phoneNumber = "+48" + customer.telephone
         textMessage = makeMessage.getMessage(customer)
+        messageId = customer.telephone.toInt()
+        dateTimeOfVisitMill = customer.date
 
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.SEND_SMS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
 
+            scheduleMessage()
 
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
-                sendMessage(phoneNumber, textMessage)
-            }else {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(android.Manifest.permission.SEND_SMS),
-                    100
-                )
-            }
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.SEND_SMS),
+                100
+            )
+        }
 
         this.finish()
     }
 
+    private fun scheduleMessage() {
+        val intent = Intent(this, MessageReceiver::class.java).apply {
+            putExtra(MESSAGE_EXTRA, textMessage)
+            putExtra(PHONE_EXTRA, phoneNumber)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            messageId,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    private fun sendMessage(phoneNumber: String, textMessage: String){
-        val smsManager = SmsManager.getDefault()
-        smsManager.sendTextMessage(phoneNumber, null, textMessage, null, null)
+        val dayBeforeVisitMillis = getDayBefore()
 
-        Toast.makeText(applicationContext, "Wysłano!!", Toast.LENGTH_SHORT).show()
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            dayBeforeVisitMillis,
+            pendingIntent
+        )
     }
+
+    private fun getDayBefore(): Long {
+        val dateTimeOfVisit = LocalDateTime.ofInstant(
+            Instant.ofEpochMilli(dateTimeOfVisitMill),
+            ZoneId.systemDefault()
+        )
+
+        val calendar = Calendar.getInstance()
+
+        calendar.set(
+            dateTimeOfVisit.year,
+            dateTimeOfVisit.monthValue - 1,
+            dateTimeOfVisit.dayOfMonth - 1,
+            15,
+            0,
+            0
+        )
+        return calendar.timeInMillis
+    }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -130,21 +187,21 @@ class OldCustomerActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if(requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            sendMessage(phoneNumber, textMessage)
-        }else{
-            Toast.makeText(applicationContext, "Nie zezwolno na wysyłanie sms", Toast.LENGTH_SHORT).show()
+        if (requestCode == 100 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            scheduleMessage()
+        } else {
+            Toast.makeText(applicationContext, "Nie zezwolno na wysyłanie sms", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
 
-
-    private fun getCustomer(customerId: String, service: String, dateOfVisit: Long): CustomerInfo{
+    private fun getCustomer(customerId: String, service: String, dateOfVisit: Long): CustomerInfo {
 
         var customerNewVisit = CustomerInfo(0, "", "", "", "")
 
-        listOfCustomers.forEach{
-            if(it.telephone == customerId){
+        listOfCustomers.forEach {
+            if (it.telephone == customerId) {
                 customerNewVisit = it
             }
         }
@@ -156,7 +213,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
     }
 
-    private fun setSpinnerInfo(){
+    private fun setSpinnerInfo() {
 
         val customersNameList = getCustomersNameList()
 
@@ -190,7 +247,6 @@ class OldCustomerActivity : AppCompatActivity() {
 
         return calendar.timeInMillis
     }
-
 
 
 }

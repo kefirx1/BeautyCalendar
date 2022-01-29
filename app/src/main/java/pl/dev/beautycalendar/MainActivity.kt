@@ -19,13 +19,9 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    companion object{
+    companion object {
         var userName = ""
-
-
         val customersList: ArrayList<CustomerInfo> = ArrayList()
-
-
         val customersToViewList: ArrayList<CustomerInfo> = ArrayList()
         val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
         val events: MutableList<EventDay> = ArrayList()
