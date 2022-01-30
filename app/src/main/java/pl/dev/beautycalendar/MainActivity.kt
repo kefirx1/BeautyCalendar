@@ -1,20 +1,14 @@
 package pl.dev.beautycalendar
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.*
-import pl.dev.beautycalendar.adapter.ViewPagerAdapter
+import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
@@ -76,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             val visitsViewList: ArrayList<CustomerInfo> = ArrayList()
 
             if(events.contains(eventDay)){
-                binding.eventCircleIndicator3.visibility = View.VISIBLE
                 binding.eventVisitsModal.visibility = View.VISIBLE
 
                 customerToEvent.forEach{
@@ -89,13 +82,15 @@ class MainActivity : AppCompatActivity() {
                     it.date
                 }
 
-                binding.viewPagerEventVisits.adapter =
-                    ViewPagerAdapter(visitsViewList, applicationContext, this)
-                binding.eventCircleIndicator3.setViewPager(binding.viewPagerEventVisits)
+                val adapter = EventsAdapter(visitsViewList, applicationContext, this)
+
+                binding.eventRecyclerView.adapter = adapter
+                binding.eventRecyclerView.layoutManager = LinearLayoutManager(this)
+
+
 
             }else{
                 visitsViewList.clear()
-                binding.eventCircleIndicator3.visibility = View.GONE
                 binding.eventVisitsModal.visibility = View.GONE
             }
         }
