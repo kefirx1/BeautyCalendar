@@ -25,7 +25,6 @@ class OldCustomerActivity : AppCompatActivity() {
     private lateinit var makeMessage: MakeMessage
     private lateinit var scheduleMessage: ScheduleMessage
 
-
     private var phoneNumber = ""
     private var textMessage = ""
     private var dateTimeOfVisitMill = 0L

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.EventDay
+import com.google.firebase.database.*
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
@@ -16,7 +17,6 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
 
-
     companion object {
         var userName = ""
         val customersList: ArrayList<CustomerInfo> = ArrayList()
@@ -25,12 +25,9 @@ class MainActivity : AppCompatActivity() {
         val events: MutableList<EventDay> = ArrayList()
     }
 
-
     private lateinit var binding: ActivityMainBinding
-
-    val phoneNumber = "+48605386566"
-    val textMessage = "Test"
-
+    private lateinit var database: FirebaseDatabase
+    private lateinit var reference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,42 +38,43 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setUserName()
-        setListeners()
-
 
     }
-
 
     override fun onResume() {
         super.onResume()
 
+        Log.d("TAG", "On resume")
 
-        setViewPager()
-        setCalendar()
+        if (userName != "") {
+            setListeners()
 
+            checkVisits()
+            setViewPager()
+            setCalendar()
 
-
+        }
 
     }
 
 
-    private fun setListeners(){
-        binding.newVisitButton.setOnClickListener{
+    private fun setListeners() {
+        binding.newVisitButton.setOnClickListener {
             Log.e("TAG", "New visit")
             binding.newVisitModal.visibility = View.VISIBLE
 
-            binding.newVisitModalBackButton.setOnClickListener{
+            binding.newVisitModalBackButton.setOnClickListener {
                 binding.newVisitModal.visibility = View.GONE
             }
 
-            binding.newCustomerButton.setOnClickListener{
+            binding.newCustomerButton.setOnClickListener {
                 Log.e("TAG", "New customer")
                 val intent = Intent(this, NewCustomerActivity::class.java)
                 resetModals()
                 startActivity(intent)
             }
 
-            binding.oldCustomerButton.setOnClickListener{
+            binding.oldCustomerButton.setOnClickListener {
                 Log.e("TAG", "Old customer")
                 val intent = Intent(this, OldCustomerActivity::class.java)
                 resetModals()
@@ -86,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        binding.otherLinearLayout.setOnClickListener{
+        binding.otherLinearLayout.setOnClickListener {
             Log.e("TAG", "Other")
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -98,17 +96,52 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setViewPager(){
+    private fun setViewPager() {
 
     }
 
 
+    private fun checkVisits() {
+        database = FirebaseDatabase.getInstance()
+        reference = database.getReference(userName)
 
-    private fun setCalendar(){
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                customersList.clear()
+                val singleCustomerInfoList: java.util.ArrayList<String> = java.util.ArrayList()
+
+                snapshot.children.forEach { customer ->
+                    customer.children.forEach {
+                        singleCustomerInfoList.add(it.value.toString())
+                    }
+                    val singleCustomer = CustomerInfo(
+                        singleCustomerInfoList[0].toLong(),
+                        singleCustomerInfoList[1],
+                        singleCustomerInfoList[2],
+                        singleCustomerInfoList[3],
+                        singleCustomerInfoList[4]
+                    )
+                    customersList.add(singleCustomer)
+                    singleCustomerInfoList.clear()
+                }
+                setCalendar()
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.w("TAG", "Failed to read value.", error.toException())
+            }
+        })
+    }
+
+
+    private fun setCalendar() {
+
+        Log.e("TAG", "Calendar")
 
         val calendar = Calendar.getInstance()
 
-        customersList.forEach{
+        customersList.forEach {
             customersToViewList.add(it)
             val dateOfVisitMillis = it.date
             val dateOfVisitSec = dateOfVisitMillis / 1000
@@ -143,7 +176,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setUserName(){
+    private fun setUserName() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }

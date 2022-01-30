@@ -53,7 +53,9 @@ class NewCustomerActivity : AppCompatActivity() {
         binding.addNewCustomerButton.setOnClickListener {
 
             val name = binding.nameEditText.text.toString()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             val surname = binding.surnameEditText.text.toString()
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             val telephone = binding.telephoneEditText.text.toString()
             val service = binding.serviceEditText.text.toString()
             val dateOfVisit = getDateOfVisitMillis()
@@ -75,7 +77,6 @@ class NewCustomerActivity : AppCompatActivity() {
         reference.child(newCustomer.telephone).setValue(newCustomer)
 
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
-
 
         phoneNumber = "+48" + newCustomer.telephone
         textMessage = makeMessage.getMessage(newCustomer)
