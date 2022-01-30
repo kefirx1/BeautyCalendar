@@ -129,8 +129,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.otherLinearLayout.setOnClickListener {
             Log.e("TAG", "Other")
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            setUserName()
         }
     }
 

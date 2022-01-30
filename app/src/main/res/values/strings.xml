@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BeautyCalendar</string>
+    <string name="app_name">Beauty Calendar</string>
 
     <array name="material_calendar_months_array">
         <item>Styczeń</item>

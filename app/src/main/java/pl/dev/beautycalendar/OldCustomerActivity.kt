@@ -110,7 +110,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
         phoneNumber = "+48" + customer.telephone
         textMessage = makeMessage.getMessage(customer)
-        messageId = (customer.date/1000/60).toInt()
+        messageId = (customer.date/1000/60).toInt() + customer.telephone.toInt()
         dateTimeOfVisitMill = customer.date
 
         if (ContextCompat.checkSelfPermission(
