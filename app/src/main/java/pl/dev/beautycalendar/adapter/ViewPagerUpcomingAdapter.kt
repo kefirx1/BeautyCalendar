@@ -23,7 +23,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
-class ViewPagerAdapter(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<ViewPagerAdapter.Pager2ViewHandler>() {
+class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<ViewPagerUpcomingAdapter.Pager2ViewHandler>() {
 
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
@@ -34,8 +34,6 @@ class ViewPagerAdapter(private val visitsList: ArrayList<CustomerInfo>, private 
         val telephoneTextView: TextView = itemView.findViewById(R.id.eventPageTelephoneTextView)
         val serviceTextView: TextView = itemView.findViewById(R.id.eventPageServiceTextView)
         val cancelButton: Button = itemView.findViewById(R.id.cancelEventVisitButton)
-        val modal: LinearLayout = instance.findViewById(R.id.eventVisitsModal)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Pager2ViewHandler {
@@ -79,7 +77,6 @@ class ViewPagerAdapter(private val visitsList: ArrayList<CustomerInfo>, private 
             customer.active = 0
 
             reference.child(customer.telephone).setValue(customer)
-            holder.modal.visibility = View.GONE
         }
     }
 

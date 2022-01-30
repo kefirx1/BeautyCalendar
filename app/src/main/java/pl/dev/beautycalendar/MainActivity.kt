@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.*
 import pl.dev.beautycalendar.adapter.ViewPagerAdapter
+import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
@@ -141,6 +142,53 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViewPager() {
 
+        val currentDay = Calendar.getInstance()
+        val currentDayEnd = Calendar.getInstance()
+        val currentDayOfMonth = currentDay.get(Calendar.DAY_OF_MONTH)
+        val currentMonth = currentDay.get(Calendar.MONTH)
+        val currentYear = currentDay.get(Calendar.YEAR)
+        val currentHour = currentDay.get(Calendar.HOUR_OF_DAY)
+
+
+        currentDay.set(currentYear, currentMonth, currentDayOfMonth, 0, 0, 0)
+        currentDayEnd.set(currentYear, currentMonth, currentDayOfMonth, 23, 59, 59)
+
+        val currentDayStartMill = currentDay.timeInMillis
+        val currentDayEndMill = currentDayEnd.timeInMillis
+
+        currentDay.set(currentYear, currentMonth, currentDayOfMonth+1, 0, 0, 0)
+        currentDayEnd.set(currentYear, currentMonth, currentDayOfMonth+1, 23, 59, 59)
+
+        val nextDayStartMill = currentDay.timeInMillis
+        val nextDayEndMill = currentDayEnd.timeInMillis
+
+        val customerUpcomingList: ArrayList<CustomerInfo> = ArrayList()
+
+        customersList.forEach { customer ->
+
+            if (customer.active == 1) {
+
+                if (currentHour < 20) {
+                    if (customer.date in currentDayStartMill..currentDayEndMill) {
+                        customerUpcomingList.add(customer)
+                    }
+                } else {
+                    if (customer.date in nextDayStartMill..nextDayEndMill) {
+                        customerUpcomingList.add(customer)
+                    }
+                }
+            }
+
+        }
+
+        customerUpcomingList.sortBy {
+            it.date
+        }
+
+        binding.upcomingVisitsViewPager.adapter =
+            ViewPagerUpcomingAdapter(customerUpcomingList, applicationContext, this)
+        binding.upcomingCircleIndicator3.setViewPager(binding.upcomingVisitsViewPager)
+
     }
 
 
@@ -168,6 +216,7 @@ class MainActivity : AppCompatActivity() {
                     customersList.add(singleCustomer)
                     singleCustomerInfoList.clear()
                 }
+                setViewPager()
                 setCalendar()
             }
 

@@ -42,7 +42,7 @@
     </androidx.viewpager2.widget.ViewPager2>
 
     <me.relex.circleindicator.CircleIndicator3
-        android:id="@+id/circleIndicator3"
+        android:id="@+id/upcomingCircleIndicator3"
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:background="@color/darkGray"
@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circleIndicator3"
+        app:layout_constraintTop_toBottomOf="@+id/upcomingCircleIndicator3"
         app:pagesColor="@color/darkGray" />
 
     <LinearLayout
