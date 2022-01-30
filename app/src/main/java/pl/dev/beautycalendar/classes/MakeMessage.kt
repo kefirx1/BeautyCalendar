@@ -30,7 +30,7 @@ class MakeMessage {
             minute = "0$minute"
         }
 
-        return "$day.$month.$year $hour:$minute"
+        return "$day.$month.$year ,godzina $hour:$minute"
 
     }
 

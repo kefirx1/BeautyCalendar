@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
 
             if (customer.active == 1) {
 
-                if (currentHour < 20) {
+                if (currentHour < 19) {
                     if (customer.date in currentDayStartMill..currentDayEndMill) {
                         customerUpcomingList.add(customer)
                     }
