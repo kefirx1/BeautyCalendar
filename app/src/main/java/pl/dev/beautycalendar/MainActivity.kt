@@ -1,10 +1,17 @@
 package pl.dev.beautycalendar
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.*
 import pl.dev.beautycalendar.adapter.ViewPagerAdapter
@@ -34,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -46,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         Log.d("TAG", "On resume")
+
 
         clearEvents()
 
@@ -59,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
     private fun setCalendarEventsListener() {
         binding.calendarView.setOnDayClickListener{ eventDay ->

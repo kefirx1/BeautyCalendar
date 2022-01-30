@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.ListAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -62,7 +63,9 @@ class OldCustomerActivity : AppCompatActivity() {
                     listOfCustomers.add(singleCustomer)
                     singleCustomerInfoList.clear()
                 }
-                setSpinnerInfo()
+
+                setAutoCompletedInfo()
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -80,7 +83,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
         binding.addOldCustomerButton.setOnClickListener {
 
-            val customerName = binding.customerSpinner.selectedItem.toString()
+            val customerName = binding.customerSpinner.text.toString()
             val service = binding.serviceEditText.text.toString()
             val dateOfVisit = getDateOfVisitMillis()
 
@@ -169,15 +172,12 @@ class OldCustomerActivity : AppCompatActivity() {
 
     }
 
-    private fun setSpinnerInfo() {
-
+    private fun setAutoCompletedInfo(){
         val customersNameList = getCustomersNameList()
-
-        val adapter = ArrayAdapter(this, layout.simple_spinner_item, customersNameList)
-
-        binding.customerSpinner.adapter = adapter
-
+        val adapter = ArrayAdapter(applicationContext, layout.simple_list_item_1, customersNameList)
+        binding.customerSpinner.setAdapter(adapter)
     }
+
 
     private fun getCustomersNameList(): ArrayList<String> {
 
