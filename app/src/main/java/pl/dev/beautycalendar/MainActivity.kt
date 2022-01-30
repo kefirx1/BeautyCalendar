@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.*
+import pl.dev.beautycalendar.adapter.ViewPagerAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
@@ -20,9 +21,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var userName = ""
         val customersList: ArrayList<CustomerInfo> = ArrayList()
-        val customersToViewList: ArrayList<CustomerInfo> = ArrayList()
         val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
-        val events: MutableList<EventDay> = ArrayList()
+        val events: ArrayList<EventDay> = ArrayList()
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -54,15 +54,55 @@ class MainActivity : AppCompatActivity() {
             checkVisits()
             setViewPager()
             setCalendar()
-
+            setCalendarEventsListener()
         }
 
     }
 
+    private fun setCalendarEventsListener() {
+        binding.calendarView.setOnDayClickListener{ eventDay ->
+
+            resetModals()
+
+            val visitsViewList: ArrayList<CustomerInfo> = ArrayList()
+
+            if(events.contains(eventDay)){
+                binding.eventCircleIndicator3.visibility = View.VISIBLE
+                binding.eventVisitsModal.visibility = View.VISIBLE
+
+                customerToEvent.forEach{
+                    if(it.value.date / 1000 / 60 / 60 / 24 == (eventDay.calendar.timeInMillis / 1000 / 60 / 60 / 24 )+ 1){
+                        visitsViewList.add(it.value)
+                    }
+                }
+
+                visitsViewList.sortBy {
+                    it.date
+                }
+
+                binding.viewPagerEventVisits.adapter =
+                    ViewPagerAdapter(visitsViewList, applicationContext)
+                binding.eventCircleIndicator3.setViewPager(binding.viewPagerEventVisits)
+
+            }else{
+                visitsViewList.clear()
+                binding.eventCircleIndicator3.visibility = View.GONE
+                binding.eventVisitsModal.visibility = View.GONE
+            }
+        }
+    }
+
 
     private fun setListeners() {
+        binding.eventVisitsModalBackButton.setOnClickListener{
+            binding.eventVisitsModal.visibility = View.GONE
+        }
+
         binding.newVisitButton.setOnClickListener {
             Log.e("TAG", "New visit")
+
+            resetModals()
+
             binding.newVisitModal.visibility = View.VISIBLE
 
             binding.newVisitModalBackButton.setOnClickListener {
@@ -95,6 +135,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun resetModals() {
         binding.newVisitModal.visibility = View.GONE
+        binding.eventVisitsModal.visibility = View.GONE
     }
 
 
@@ -137,7 +178,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun clearEvents(){
         customersList.clear()
-        customersToViewList.clear()
         customerToEvent.clear()
         events.clear()
     }
@@ -151,7 +191,6 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
 
         customersList.forEach {
-            customersToViewList.add(it)
             val dateOfVisitMillis = it.date
             val dateOfVisitSec = dateOfVisitMillis / 1000
             val dateOfVisit = LocalDateTime.ofEpochSecond(
@@ -175,6 +214,9 @@ class MainActivity : AppCompatActivity() {
                 dateOfVisit.minute,
                 dateOfVisit.second
             )
+
+            println(calendar.time)
+
             val event = EventDay(calendar.clone() as Calendar, R.drawable.ic_baseline_event_24)
             events.add(event)
             customerToEvent[event] = it
@@ -186,6 +228,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setUserName() {
+        resetModals()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }

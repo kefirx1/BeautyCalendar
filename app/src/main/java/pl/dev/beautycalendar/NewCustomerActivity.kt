@@ -80,7 +80,7 @@ class NewCustomerActivity : AppCompatActivity() {
 
         phoneNumber = "+48" + newCustomer.telephone
         textMessage = makeMessage.getMessage(newCustomer)
-        messageId = newCustomer.telephone.toInt()
+        messageId = (newCustomer.date/1000/60).toInt()
         dateTimeOfVisitMill = newCustomer.date
 
 

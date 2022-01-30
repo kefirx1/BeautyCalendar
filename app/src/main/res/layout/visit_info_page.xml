@@ -4,60 +4,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/eventPageName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/bold"
-        android:text="dsa"
-        android:textSize="35sp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/eventPageTelephone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102" />
-
-    <TextView
-        android:id="@+id/eventPageTelephone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:fontFamily="@font/regular"
-        android:text="ds"
-        android:textAlignment="center"
-        android:textColor="@color/primary"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@+id/eventPageService"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/eventPageService"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/regular"
-        android:text="ds"
-        android:textAlignment="center"
-        android:textColor="@color/primary"
-        android:textSize="22sp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/cancelEventVisitButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/cancelEventVisitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="576dp"
+        android:layout_marginBottom="16dp"
         android:scaleX="0.8"
         android:scaleY="0.9"
         android:text="ODWOŁAJ WIZYTĘ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/eventPageServiceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/regular"
+        android:text="ds"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/cancelEventVisitButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/eventPageNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/bold"
+        android:text="dsdsdsdsdsdsdsdsdsdsdsdsda"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/eventPageTelephoneTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/eventPageTelephoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/regular"
+        android:text="ds"
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/eventPageServiceTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
