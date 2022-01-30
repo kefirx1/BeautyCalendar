@@ -12,6 +12,7 @@ import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
+import pl.dev.beautycalendar.databinding.EventsLongDialogBinding
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*

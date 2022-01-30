@@ -176,8 +176,6 @@
 
 
 
-
-
     <LinearLayout
         android:id="@+id/otherLinearLayout"
         android:layout_width="match_parent"

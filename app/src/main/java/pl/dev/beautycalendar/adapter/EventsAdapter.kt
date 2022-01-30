@@ -2,12 +2,16 @@ package pl.dev.beautycalendar.adapter
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
+import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -15,9 +19,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import info.androidhive.fontawesome.FontTextView
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.R
 import pl.dev.beautycalendar.data.CustomerInfo
+import pl.dev.beautycalendar.databinding.EventsLongDialogBinding
 import pl.dev.beautycalendar.receiver.MessageReceiver
 import java.time.Instant
 import java.time.LocalDateTime
@@ -45,13 +51,63 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     }
 
     override fun onBindViewHolder(holder: ViewHandler, position: Int) {
-//        setCancelVisitButtonListener(holder, position)
         setExamDetails(holder, position)
         holder.rowLayout.setOnLongClickListener{
-            Toast.makeText(applicationContext, holder.nameTextView.text.toString(), Toast.LENGTH_SHORT).show()
+
+
+            showDialog(holder, position)
+
+
             true
         }
 
+    }
+
+    private fun showDialog(holder: ViewHandler, position: Int){
+
+        val dialog = Dialog(instance)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.events_long_dialog)
+
+        val backButton: FontTextView = dialog.findViewById(R.id.eventVisitsDialogBackButton)
+        val callButton: Button = dialog.findViewById(R.id.callEventButton)
+        val messageButton: Button = dialog.findViewById(R.id.messageEventButton)
+        val cancelButton: Button = dialog.findViewById(R.id.cancelEventButton)
+
+        backButton.setOnClickListener{
+            dialog.dismiss()
+        }
+        callButton.setOnClickListener{
+            callToCustomer(position)
+            dialog.dismiss()
+            holder.modal.visibility = View.GONE
+        }
+        messageButton.setOnClickListener{
+            messageToCustomer(position)
+            dialog.dismiss()
+            holder.modal.visibility = View.GONE
+        }
+        cancelButton.setOnClickListener{
+            cancelVisit(holder, position)
+            dialog.dismiss()
+            holder.modal.visibility = View.GONE
+        }
+
+        dialog.show()
+    }
+
+    private fun messageToCustomer(position: Int) {
+        val messageIntent = Intent(Intent.ACTION_VIEW)
+        messageIntent.type = "vnd.android-dir/mms-sms"
+        messageIntent.putExtra("address", visitsList[position].telephone)
+        instance.startActivity(messageIntent)
+    }
+
+    private fun callToCustomer(position: Int) {
+        val dialIntent = Intent(Intent.ACTION_DIAL)
+        dialIntent.data = Uri.parse("tel:" + visitsList[position].telephone)
+        instance.startActivity(dialIntent)
     }
 
     override fun getItemCount(): Int {
@@ -59,36 +115,34 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     }
 
 
-//    private fun setCancelVisitButtonListener(holder: Pager2ViewHandler, position: Int) {
-//        holder.cancelButton.setOnClickListener {
-//            Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
-//
-//            val messageId = (visitsList[position].date / 1000 / 60).toInt()
-//
-//            val intent = Intent(instance, MessageReceiver::class.java)
-//
-//            val pendingIntent = PendingIntent.getBroadcast(
-//                applicationContext,
-//                messageId,
-//                intent,
-//                PendingIntent.FLAG_IMMUTABLE
-//            )
-//
-//            val alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//
-//            alarmManager.cancel(pendingIntent)
-//
-//            database = FirebaseDatabase.getInstance()
-//            reference = database.getReference(MainActivity.userName)
-//
-//            val customer = visitsList[position]
-//
-//            customer.active = 0
-//
-//            reference.child(customer.telephone).setValue(customer)
-//            holder.modal.visibility = View.GONE
-//        }
-//    }
+    private fun cancelVisit(holder: ViewHandler, position: Int) {
+        Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
+
+        val messageId = (visitsList[position].date / 1000 / 60).toInt()
+
+        val intent = Intent(instance, MessageReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            messageId,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        alarmManager.cancel(pendingIntent)
+
+        database = FirebaseDatabase.getInstance()
+        reference = database.getReference(MainActivity.userName)
+
+        val customer = visitsList[position]
+
+        customer.active = 0
+
+        reference.child(customer.telephone).setValue(customer)
+        holder.modal.visibility = View.GONE
+    }
 
     @SuppressLint("SetTextI18n")
     private fun setExamDetails(holder: ViewHandler, position: Int) {
