@@ -52,11 +52,12 @@ class OldCustomerActivity : AppCompatActivity() {
                         singleCustomerInfoList.add(it.value.toString())
                     }
                     val singleCustomer = CustomerInfo(
-                        singleCustomerInfoList[0].toLong(),
-                        singleCustomerInfoList[1],
+                        singleCustomerInfoList[0].toInt(),
+                        singleCustomerInfoList[1].toLong(),
                         singleCustomerInfoList[2],
                         singleCustomerInfoList[3],
-                        singleCustomerInfoList[4]
+                        singleCustomerInfoList[4],
+                        singleCustomerInfoList[5]
                     )
                     listOfCustomers.add(singleCustomer)
                     singleCustomerInfoList.clear()
@@ -152,7 +153,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
     private fun getCustomer(customerId: String, service: String, dateOfVisit: Long): CustomerInfo {
 
-        var customerNewVisit = CustomerInfo(0, "", "", "", "")
+        var customerNewVisit = CustomerInfo(1,0, "", "", "", "")
 
         listOfCustomers.forEach {
             if (it.telephone == customerId) {
@@ -160,6 +161,7 @@ class OldCustomerActivity : AppCompatActivity() {
             }
         }
 
+        customerNewVisit.active = 1
         customerNewVisit.service = service
         customerNewVisit.date = dateOfVisit
 

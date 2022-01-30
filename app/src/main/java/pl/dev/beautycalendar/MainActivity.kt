@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 binding.viewPagerEventVisits.adapter =
-                    ViewPagerAdapter(visitsViewList, applicationContext)
+                    ViewPagerAdapter(visitsViewList, applicationContext, this)
                 binding.eventCircleIndicator3.setViewPager(binding.viewPagerEventVisits)
 
             }else{
@@ -158,11 +158,12 @@ class MainActivity : AppCompatActivity() {
                         singleCustomerInfoList.add(it.value.toString())
                     }
                     val singleCustomer = CustomerInfo(
-                        singleCustomerInfoList[0].toLong(),
-                        singleCustomerInfoList[1],
+                        singleCustomerInfoList[0].toInt(),
+                        singleCustomerInfoList[1].toLong(),
                         singleCustomerInfoList[2],
                         singleCustomerInfoList[3],
-                        singleCustomerInfoList[4]
+                        singleCustomerInfoList[4],
+                        singleCustomerInfoList[5]
                     )
                     customersList.add(singleCustomer)
                     singleCustomerInfoList.clear()
@@ -191,35 +192,35 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
 
         customersList.forEach {
-            val dateOfVisitMillis = it.date
-            val dateOfVisitSec = dateOfVisitMillis / 1000
-            val dateOfVisit = LocalDateTime.ofEpochSecond(
-                dateOfVisitSec, 0,
-                ZoneOffset.UTC
-            )
+            if(it.active==1){
+                val dateOfVisitMillis = it.date
+                val dateOfVisitSec = dateOfVisitMillis / 1000
+                val dateOfVisit = LocalDateTime.ofEpochSecond(
+                    dateOfVisitSec, 0,
+                    ZoneOffset.UTC
+                )
 
-            var hour = dateOfVisit.hour + 1
+                var hour = dateOfVisit.hour + 1
 
-            if (dateOfVisit.monthValue == 3 && dateOfVisit.dayOfMonth >= 27) {
-                hour++
-            } else if (dateOfVisit.monthValue in 4..8) {
-                hour++
+                if (dateOfVisit.monthValue == 3 && dateOfVisit.dayOfMonth >= 27) {
+                    hour++
+                } else if (dateOfVisit.monthValue in 4..8) {
+                    hour++
+                }
+
+                calendar.set(
+                    dateOfVisit.year,
+                    dateOfVisit.monthValue - 1,
+                    dateOfVisit.dayOfMonth,
+                    hour,
+                    dateOfVisit.minute,
+                    dateOfVisit.second
+                )
+
+                val event = EventDay(calendar.clone() as Calendar, R.drawable.ic_baseline_event_24)
+                events.add(event)
+                customerToEvent[event] = it
             }
-
-            calendar.set(
-                dateOfVisit.year,
-                dateOfVisit.monthValue - 1,
-                dateOfVisit.dayOfMonth,
-                hour,
-                dateOfVisit.minute,
-                dateOfVisit.second
-            )
-
-            println(calendar.time)
-
-            val event = EventDay(calendar.clone() as Calendar, R.drawable.ic_baseline_event_24)
-            events.add(event)
-            customerToEvent[event] = it
         }
 
         binding.calendarView.setEvents(events)

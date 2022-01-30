@@ -61,7 +61,7 @@ class NewCustomerActivity : AppCompatActivity() {
             val dateOfVisit = getDateOfVisitMillis()
 
             if (name.isNotBlank() && surname.isNotBlank() && telephone.isNotBlank() && service.isNotBlank()) {
-                newCustomer = CustomerInfo(dateOfVisit, name, service, surname, telephone)
+                newCustomer = CustomerInfo(1, dateOfVisit, name, service, surname, telephone)
                 addNewVisit(newCustomer)
             } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
