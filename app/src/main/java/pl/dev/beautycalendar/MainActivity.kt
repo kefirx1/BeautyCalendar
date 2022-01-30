@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("TAG", "On resume")
 
+        clearEvents()
+
         if (userName != "") {
             setListeners()
 
@@ -107,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                customersList.clear()
+                clearEvents()
                 val singleCustomerInfoList: java.util.ArrayList<String> = java.util.ArrayList()
 
                 snapshot.children.forEach { customer ->
@@ -125,7 +127,6 @@ class MainActivity : AppCompatActivity() {
                     singleCustomerInfoList.clear()
                 }
                 setCalendar()
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -133,6 +134,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    private fun clearEvents(){
+        customersList.clear()
+        customersToViewList.clear()
+        customerToEvent.clear()
+        events.clear()
+    }
+
 
 
     private fun setCalendar() {
@@ -166,7 +175,7 @@ class MainActivity : AppCompatActivity() {
                 dateOfVisit.minute,
                 dateOfVisit.second
             )
-            val event = EventDay(calendar.clone() as Calendar, R.drawable.ic_baseline_add_24)
+            val event = EventDay(calendar.clone() as Calendar, R.drawable.ic_baseline_event_24)
             events.add(event)
             customerToEvent[event] = it
         }
