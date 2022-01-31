@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.*
 import pl.dev.beautycalendar.adapter.EventsAdapter
-import pl.dev.beautycalendar.adapter.InfoListAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
@@ -17,8 +16,6 @@ import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 

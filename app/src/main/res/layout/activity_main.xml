@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkGray"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -20,18 +21,19 @@
         <ImageButton
             android:id="@+id/newVisitButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="50dp"
             android:layout_marginTop="5dp"
-            android:background="@color/darkGray"
+            android:backgroundTint="@color/darkGray"
+            android:contentDescription="@string/addnewbutton"
             android:src="@drawable/ic_baseline_add_24"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
     </LinearLayout>
 
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/upcomingVisitsViewPager"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:background="@color/darkGray"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +61,7 @@
         app:abbreviationsLabelsColor="@color/white"
         app:daysLabelsColor="@color/fuchsia"
         app:headerColor="@color/fuchsia"
+
         app:headerLabelColor="@color/darkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -175,7 +178,6 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:id="@+id/otherLinearLayout"
         android:layout_width="match_parent"
@@ -195,14 +197,12 @@
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_marginEnd="30dp"
-            android:background="@drawable/spinner"
             android:text="ZMIANA"/>
 
         <Button
             android:id="@+id/customersListButton"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:background="@drawable/spinner"
             android:text="KLIENTKI" />
 
     </LinearLayout>

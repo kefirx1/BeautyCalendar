@@ -24,15 +24,11 @@ import java.time.ZoneId
 
 class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<ViewPagerUpcomingAdapter.Pager2ViewHandler>() {
 
-    private lateinit var database: FirebaseDatabase
-    private lateinit var reference: DatabaseReference
-
     inner class Pager2ViewHandler(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val nameTextView: TextView = itemView.findViewById(R.id.eventPageNameTextView)
         val telephoneTextView: TextView = itemView.findViewById(R.id.eventPageTelephoneTextView)
         val serviceTextView: TextView = itemView.findViewById(R.id.eventPageServiceTextView)
-        val cancelButton: Button = itemView.findViewById(R.id.cancelEventVisitButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Pager2ViewHandler {
@@ -41,7 +37,6 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, 
 
     override fun onBindViewHolder(holder: Pager2ViewHandler, position: Int) {
         sortVisitsList()
-        setCancelVisitButtonListener(holder, position)
         setExamDetails(holder, position)
     }
 
@@ -53,38 +48,6 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, 
 
     override fun getItemCount(): Int {
         return visitsList.size
-    }
-
-
-    private fun setCancelVisitButtonListener(holder: Pager2ViewHandler, position: Int) {
-        holder.cancelButton.setOnClickListener {
-            Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
-
-
-            val messageId = (visitsList[position].dateOf[visitsList[position].dateOf.size-1].date / 1000 / 60).toInt() + visitsList[position].telephone.toInt()
-
-            val intent = Intent(instance, MessageReceiver::class.java)
-
-            val pendingIntent = PendingIntent.getBroadcast(
-                applicationContext,
-                messageId,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-
-            val alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-            alarmManager.cancel(pendingIntent)
-
-            database = FirebaseDatabase.getInstance()
-            reference = database.getReference(MainActivity.userName)
-
-            val customer = visitsList[position]
-
-            customer.active = 0
-
-            reference.child(customer.telephone).setValue(customer)
-        }
     }
 
     @SuppressLint("SetTextI18n")
