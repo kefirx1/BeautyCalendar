@@ -76,6 +76,44 @@
             android:background="@drawable/spinner">
         </androidx.recyclerview.widget.RecyclerView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/callCustomerButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner"
+                android:padding="5dp"
+                android:layout_marginEnd="20dp"
+                android:text="ZADZWOŃ"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/cancelEventButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Button
+                android:id="@+id/messageCustomerButton"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/spinner"
+                android:padding="5dp"
+                android:text="WIADOMOŚĆ"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/cancelEventButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/callEventButton"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.0" />
+        </LinearLayout>
+
 
     </LinearLayout>
 

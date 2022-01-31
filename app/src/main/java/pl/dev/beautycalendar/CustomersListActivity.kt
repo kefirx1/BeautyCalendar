@@ -2,6 +2,8 @@ package pl.dev.beautycalendar
 
 import android.R
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -41,7 +43,7 @@ class CustomersListActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setView(){
+    private fun setView() {
         val customerName = binding.customersListAutoComplete.text.toString()
         val customerId = getCustomerId(customerName)
         val customer = getCustomer(customerId)
@@ -57,12 +59,32 @@ class CustomersListActivity : AppCompatActivity() {
         binding.customersListRecyclerView.adapter = adapter
         binding.customersListRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        binding.callCustomerButton.setOnClickListener {
+            callToCustomer(customer)
+        }
+        binding.messageCustomerButton.setOnClickListener {
+            messageToCustomer(customer)
+        }
+
+    }
+
+    private fun messageToCustomer(customer: CustomerInfo) {
+        val messageIntent = Intent(Intent.ACTION_VIEW)
+        messageIntent.type = "vnd.android-dir/mms-sms"
+        messageIntent.putExtra("address", customer.telephone)
+        startActivity(messageIntent)
+    }
+
+    private fun callToCustomer(customer: CustomerInfo) {
+        val dialIntent = Intent(Intent.ACTION_DIAL)
+        dialIntent.data = Uri.parse("tel:" + customer.telephone)
+        startActivity(dialIntent)
     }
 
     private fun getCustomer(customerId: String): CustomerInfo {
 
         val emptyList: ArrayList<VisitsDate> = ArrayList()
-        var customerNewVisit = CustomerInfo(1, emptyList , "", "", "")
+        var customerNewVisit = CustomerInfo(1, emptyList, "", "", "")
 
         customersList.forEach {
             if (it.telephone == customerId) {
@@ -74,20 +96,21 @@ class CustomersListActivity : AppCompatActivity() {
 
     }
 
-    private fun setAutoCompletedInfo(){
+    private fun setAutoCompletedInfo() {
         val customersNameList = getCustomersNameList()
-        val adapter = ArrayAdapter(applicationContext, R.layout.simple_list_item_1, customersNameList)
+        val adapter =
+            ArrayAdapter(applicationContext, R.layout.simple_list_item_1, customersNameList)
         binding.customersListAutoComplete.setAdapter(adapter)
 
         binding.customersListAutoComplete.doAfterTextChanged {
             if (it != null) {
-                if(it.length>9){
+                if (it.length > 9) {
                     binding.customersListInfoLayout.visibility = View.VISIBLE
                     setView()
-                }else{
+                } else {
                     binding.customersListInfoLayout.visibility = View.GONE
                 }
-            }else{
+            } else {
                 binding.customersListInfoLayout.visibility = View.GONE
             }
         }
@@ -151,7 +174,5 @@ class CustomersListActivity : AppCompatActivity() {
             }
         })
     }
-
-
 
 }
