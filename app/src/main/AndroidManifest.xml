@@ -3,7 +3,7 @@
     package="pl.dev.beautycalendar">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,14 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Design.NoActionBar">
         <activity
+            android:name=".CustomersListActivity"
+            android:exported="false" />
+        <activity
             android:name=".OldCustomerActivity"
             android:exported="false"
-            android:screenOrientation="nosensor">
-        </activity>
+            android:screenOrientation="nosensor"></activity>
         <activity
             android:name=".NewCustomerActivity"
             android:exported="false"
-            android:screenOrientation="nosensor"/>
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".LoginActivity"
             android:exported="false"
@@ -38,10 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".receiver.MessageReceiver"
-            android:exported="true"
-            android:enabled="true">
-        </receiver>
+
+        <receiver
+            android:name=".receiver.MessageReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

@@ -127,7 +127,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        binding.otherLinearLayout.setOnClickListener {
+        binding.changeUserButton.setOnClickListener {
             Log.e("TAG", "Other")
             setUserName()
         }
@@ -225,8 +225,6 @@ class MainActivity : AppCompatActivity() {
                         listOfItems[3] as String,
                         listOfItems[4] as String,
                     )
-
-                    println(singleCustomer)
 
                     customersList.add(singleCustomer)
                 }
