@@ -40,8 +40,15 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, 
     }
 
     override fun onBindViewHolder(holder: Pager2ViewHandler, position: Int) {
+        sortVisitsList()
         setCancelVisitButtonListener(holder, position)
         setExamDetails(holder, position)
+    }
+
+    private fun sortVisitsList(){
+        visitsList.sortBy {
+            it.dateOf[it.dateOf.size-1].date
+        }
     }
 
     override fun getItemCount(): Int {

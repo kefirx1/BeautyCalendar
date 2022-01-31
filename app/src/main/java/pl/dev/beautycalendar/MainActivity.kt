@@ -65,17 +65,17 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setCalendarEventsListener() {
-        binding.calendarView.setOnDayClickListener{ eventDay ->
+        binding.calendarView.setOnDayClickListener { eventDay ->
 
             resetModals()
 
             val visitsViewList: ArrayList<CustomerInfo> = ArrayList()
 
-            if(events.contains(eventDay)){
+            if (events.contains(eventDay)) {
                 binding.eventVisitsModal.visibility = View.VISIBLE
 
-                customerToEvent.forEach{
-                    if(it.value.dateOf[it.value.dateOf.size-1].date / 1000 / 60 / 60 / 24 == (eventDay.calendar.timeInMillis / 1000 / 60 / 60 / 24 )+ 1){
+                customerToEvent.forEach {
+                    if (it.value.dateOf[it.value.dateOf.size - 1].date / 1000 / 60 / 60 / 24 == (eventDay.calendar.timeInMillis / 1000 / 60 / 60 / 24) + 1) {
                         visitsViewList.add(it.value)
                     }
                 }
@@ -86,8 +86,7 @@ class MainActivity : AppCompatActivity() {
                 binding.eventRecyclerView.layoutManager = LinearLayoutManager(this)
 
 
-
-            }else{
+            } else {
                 visitsViewList.clear()
                 binding.eventVisitsModal.visibility = View.GONE
             }
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setListeners() {
-        binding.eventVisitsModalBackButton.setOnClickListener{
+        binding.eventVisitsModalBackButton.setOnClickListener {
             binding.eventVisitsModal.visibility = View.GONE
         }
 
@@ -156,8 +155,8 @@ class MainActivity : AppCompatActivity() {
         val currentDayStartMill = currentDay.timeInMillis
         val currentDayEndMill = currentDayEnd.timeInMillis
 
-        currentDay.set(currentYear, currentMonth, currentDayOfMonth+1, 0, 0, 0)
-        currentDayEnd.set(currentYear, currentMonth, currentDayOfMonth+1, 23, 59, 59)
+        currentDay.set(currentYear, currentMonth, currentDayOfMonth + 1, 0, 0, 0)
+        currentDayEnd.set(currentYear, currentMonth, currentDayOfMonth + 1, 23, 59, 59)
 
         val nextDayStartMill = currentDay.timeInMillis
         val nextDayEndMill = currentDayEnd.timeInMillis
@@ -169,11 +168,11 @@ class MainActivity : AppCompatActivity() {
             if (customer.active == 1) {
 
                 if (currentHour < 19) {
-                    if (customer.dateOf[customer.dateOf.size-1].date in currentDayStartMill..currentDayEndMill) {
+                    if (customer.dateOf[customer.dateOf.size - 1].date in currentDayStartMill..currentDayEndMill) {
                         customerUpcomingList.add(customer)
                     }
                 } else {
-                    if (customer.dateOf[customer.dateOf.size-1].date in nextDayStartMill..nextDayEndMill) {
+                    if (customer.dateOf[customer.dateOf.size - 1].date in nextDayStartMill..nextDayEndMill) {
                         customerUpcomingList.add(customer)
                     }
                 }
@@ -203,7 +202,7 @@ class MainActivity : AppCompatActivity() {
 
                     val listOfItems: ArrayList<Any> = ArrayList()
 
-                    customer.children.forEach{
+                    customer.children.forEach {
                         listOfItems.add(it.value!!)
                     }
 
@@ -211,7 +210,7 @@ class MainActivity : AppCompatActivity() {
 
                     val visitsDateRow = listOfItems[1] as ArrayList<*>
 
-                    visitsDateRow.forEach{
+                    visitsDateRow.forEach {
                         val visitsDateRowMap = it as HashMap<*, *>
                         val date = visitsDateRowMap["date"] as Long
                         val service = visitsDateRowMap["service"] as String
@@ -241,12 +240,11 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun clearEvents(){
+    private fun clearEvents() {
         customersList.clear()
         customerToEvent.clear()
         events.clear()
     }
-
 
 
     private fun setCalendar() {
@@ -256,8 +254,8 @@ class MainActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
 
         customersList.forEach {
-            if(it.active==1){
-                val dateOfVisitMillis = it.dateOf[it.dateOf.size-1].date
+            if (it.active == 1) {
+                val dateOfVisitMillis = it.dateOf[it.dateOf.size - 1].date
                 val dateOfVisitSec = dateOfVisitMillis / 1000
                 val dateOfVisit = LocalDateTime.ofEpochSecond(
                     dateOfVisitSec, 0,

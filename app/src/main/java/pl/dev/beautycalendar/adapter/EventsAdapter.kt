@@ -50,6 +50,9 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     }
 
     override fun onBindViewHolder(holder: ViewHandler, position: Int) {
+
+        sortVisitsList()
+
         setExamDetails(holder, position)
         holder.rowLayout.setOnLongClickListener{
 
@@ -60,6 +63,12 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
             true
         }
 
+    }
+
+    private fun sortVisitsList(){
+        visitsList.sortBy {
+            it.dateOf[it.dateOf.size-1].date
+        }
     }
 
     private fun showDialog(holder: ViewHandler, position: Int){
