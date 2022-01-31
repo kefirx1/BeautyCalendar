@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.*
 import pl.dev.beautycalendar.adapter.EventsAdapter
+import pl.dev.beautycalendar.adapter.InfoListAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
@@ -130,6 +131,13 @@ class MainActivity : AppCompatActivity() {
         binding.changeUserButton.setOnClickListener {
             Log.e("TAG", "Other")
             setUserName()
+        }
+
+        binding.customersListButton.setOnClickListener{
+            Log.e("TAG", "Customers list")
+            resetModals()
+            val intent = Intent(this, CustomersListActivity::class.java)
+            startActivity(intent)
         }
     }
 
