@@ -4,11 +4,13 @@ import android.R.layout
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import com.google.firebase.database.*
 import pl.dev.beautycalendar.classes.MakeMessage
 import pl.dev.beautycalendar.classes.ScheduleMessage
@@ -99,7 +101,14 @@ class OldCustomerActivity : AppCompatActivity() {
         binding.addOldCustomerButton.setOnClickListener {
 
             val customerName = binding.customerSpinner.text.toString()
-            val service = binding.serviceEditText.text.toString()
+            var service = binding.serviceEditText.text.toString()
+
+            if(service.isBlank()){
+                if(binding.serviceEditText.hint.toString().isNotBlank()){
+                    service = binding.serviceEditText.hint.toString()
+                }
+            }
+
             val dateOfVisit = getDateOfVisitMillis()
 
             val customerId = getCustomerId(customerName)
@@ -193,6 +202,35 @@ class OldCustomerActivity : AppCompatActivity() {
         val customersNameList = getCustomersNameList()
         val adapter = ArrayAdapter(applicationContext, layout.simple_list_item_1, customersNameList)
         binding.customerSpinner.setAdapter(adapter)
+
+        binding.customerSpinner.doAfterTextChanged {
+            if (it != null) {
+                if (it.length > 9) {
+                   setLastService()
+                }
+            }
+        }
+
+    }
+
+    private fun setLastService() {
+
+        val customerName = binding.customerSpinner.text.toString()
+        val customerId = getCustomerId(customerName)
+
+        val emptyList: ArrayList<VisitsDate> = ArrayList()
+        var customer = CustomerInfo(1, emptyList , "", "", "")
+
+        listOfCustomers.forEach {
+            if (it.telephone == customerId) {
+                customer = it
+            }
+        }
+
+        val lastService = customer.dateOf[customer.dateOf.size-1].service
+
+        binding.serviceEditText.hint = lastService
+
     }
 
 
