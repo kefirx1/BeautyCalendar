@@ -11,7 +11,7 @@ class MakeMessage {
 
     fun getMessage(customerInfo: CustomerInfo): String{
 
-        val dateTimeOfVisitMillis = customerInfo.date
+        val dateTimeOfVisitMillis = customerInfo.dateOf[customerInfo.dateOf.size-1].date
 
         val stringDate = getStringDate(dateTimeOfVisitMillis)
 
@@ -30,7 +30,7 @@ class MakeMessage {
             minute = "0$minute"
         }
 
-        return "$day.$month.$year ,godzina $hour:$minute"
+        return "$day.$month.$year, godzina $hour:$minute"
 
     }
 

@@ -23,7 +23,6 @@ import info.androidhive.fontawesome.FontTextView
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.R
 import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.databinding.EventsLongDialogBinding
 import pl.dev.beautycalendar.receiver.MessageReceiver
 import java.time.Instant
 import java.time.LocalDateTime
@@ -118,7 +117,7 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     private fun cancelVisit(holder: ViewHandler, position: Int) {
         Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
 
-        val messageId = (visitsList[position].date / 1000 / 60).toInt()
+        val messageId = (visitsList[position].dateOf[visitsList[position].dateOf.size-1].date / 1000 / 60).toInt() + visitsList[position].telephone.toInt()
 
         val intent = Intent(instance, MessageReceiver::class.java)
 
@@ -147,7 +146,7 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     @SuppressLint("SetTextI18n")
     private fun setExamDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            getTimeString(visitsList[position].date) + " - " + visitsList[position].service
+            getTimeString(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
         holder.nameTextView.text =
             visitsList[position].name + " " + visitsList[position].surname
     }

@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -54,7 +53,8 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, 
         holder.cancelButton.setOnClickListener {
             Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
 
-            val messageId = (visitsList[position].date / 1000 / 60).toInt()
+
+            val messageId = (visitsList[position].dateOf[visitsList[position].dateOf.size-1].date / 1000 / 60).toInt() + visitsList[position].telephone.toInt()
 
             val intent = Intent(instance, MessageReceiver::class.java)
 
@@ -84,7 +84,7 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, 
     private fun setExamDetails(holder: Pager2ViewHandler, position: Int){
         holder.nameTextView.text = visitsList[position].name + " " + visitsList[position].surname
         holder.telephoneTextView.text = visitsList[position].telephone
-        holder.serviceTextView.text =  getTimeString(visitsList[position].date) + " - " + visitsList[position].service
+        holder.serviceTextView.text =  getTimeString(visitsList[position].dateOf[visitsList[position].dateOf.size-1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size-1].service
     }
 
     private fun getTimeString(dateTimeMillis: Long): String {

@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
-import android.widget.ListAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -14,8 +13,10 @@ import com.google.firebase.database.*
 import pl.dev.beautycalendar.classes.MakeMessage
 import pl.dev.beautycalendar.classes.ScheduleMessage
 import pl.dev.beautycalendar.data.CustomerInfo
+import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityOldCustomerBinding
 import java.util.*
+import kotlin.collections.ArrayList
 
 class OldCustomerActivity : AppCompatActivity() {
 
@@ -46,22 +47,36 @@ class OldCustomerActivity : AppCompatActivity() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 listOfCustomers = ArrayList()
-                val singleCustomerInfoList: ArrayList<String> = ArrayList()
 
                 snapshot.children.forEach { customer ->
-                    customer.children.forEach {
-                        singleCustomerInfoList.add(it.value.toString())
+
+                    val listOfItems: ArrayList<Any> = ArrayList()
+
+                    customer.children.forEach{
+                        listOfItems.add(it.value!!)
                     }
+
+                    val singleVisitsDate: ArrayList<VisitsDate> = ArrayList()
+
+                    val visitsDateRow = listOfItems[1] as ArrayList<*>
+
+                    visitsDateRow.forEach{
+                        val visitsDateRowMap = it as HashMap<*, *>
+                        val date = visitsDateRowMap["date"] as Long
+                        val service = visitsDateRowMap["service"] as String
+                        val visitsDate = VisitsDate(date, service)
+                        singleVisitsDate.add(visitsDate)
+                    }
+
                     val singleCustomer = CustomerInfo(
-                        singleCustomerInfoList[0].toInt(),
-                        singleCustomerInfoList[1].toLong(),
-                        singleCustomerInfoList[2],
-                        singleCustomerInfoList[3],
-                        singleCustomerInfoList[4],
-                        singleCustomerInfoList[5]
+                        listOfItems[0].toString().toInt(),
+                        singleVisitsDate,
+                        listOfItems[2] as String,
+                        listOfItems[3] as String,
+                        listOfItems[4] as String,
                     )
+
                     listOfCustomers.add(singleCustomer)
-                    singleCustomerInfoList.clear()
                 }
 
                 setAutoCompletedInfo()
@@ -113,8 +128,8 @@ class OldCustomerActivity : AppCompatActivity() {
 
         phoneNumber = "+48" + customer.telephone
         textMessage = makeMessage.getMessage(customer)
-        messageId = (customer.date/1000/60).toInt() + customer.telephone.toInt()
-        dateTimeOfVisitMill = customer.date
+        messageId = (customer.dateOf[customer.dateOf.size-1].date/1000/60).toInt() + customer.telephone.toInt()
+        dateTimeOfVisitMill = customer.dateOf[customer.dateOf.size-1].date
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -156,7 +171,8 @@ class OldCustomerActivity : AppCompatActivity() {
 
     private fun getCustomer(customerId: String, service: String, dateOfVisit: Long): CustomerInfo {
 
-        var customerNewVisit = CustomerInfo(1,0, "", "", "", "")
+        val emptyList: ArrayList<VisitsDate> = ArrayList()
+        var customerNewVisit = CustomerInfo(1, emptyList , "", "", "")
 
         listOfCustomers.forEach {
             if (it.telephone == customerId) {
@@ -164,10 +180,11 @@ class OldCustomerActivity : AppCompatActivity() {
             }
         }
 
-        customerNewVisit.active = 1
-        customerNewVisit.service = service
-        customerNewVisit.date = dateOfVisit
 
+        val newVisitDate = VisitsDate(dateOfVisit, service)
+
+        customerNewVisit.active = 1
+        customerNewVisit.dateOf.add(newVisitDate)
         return customerNewVisit
 
     }

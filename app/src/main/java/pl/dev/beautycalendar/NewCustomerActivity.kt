@@ -1,9 +1,5 @@
 package pl.dev.beautycalendar
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
@@ -15,12 +11,10 @@ import pl.dev.beautycalendar.MainActivity.Companion.userName
 import pl.dev.beautycalendar.classes.MakeMessage
 import pl.dev.beautycalendar.classes.ScheduleMessage
 import pl.dev.beautycalendar.data.CustomerInfo
+import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityNewCustomerBinding
-import pl.dev.beautycalendar.receiver.MessageReceiver
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
+import kotlin.collections.ArrayList
 
 class NewCustomerActivity : AppCompatActivity() {
 
@@ -60,8 +54,13 @@ class NewCustomerActivity : AppCompatActivity() {
             val service = binding.serviceEditText.text.toString()
             val dateOfVisit = getDateOfVisitMillis()
 
+            val visitsDate = VisitsDate(dateOfVisit, service)
+            val visitsDateList: ArrayList<VisitsDate> = ArrayList()
+            visitsDateList.add(visitsDate)
+
+
             if (name.isNotBlank() && surname.isNotBlank() && telephone.isNotBlank() && service.isNotBlank()) {
-                newCustomer = CustomerInfo(1, dateOfVisit, name, service, surname, telephone)
+                newCustomer = CustomerInfo(1, visitsDateList, name, surname, telephone)
                 addNewVisit(newCustomer)
             } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
@@ -80,8 +79,8 @@ class NewCustomerActivity : AppCompatActivity() {
 
         phoneNumber = "+48" + newCustomer.telephone
         textMessage = makeMessage.getMessage(newCustomer)
-        messageId = (newCustomer.date/1000/60).toInt() + newCustomer.telephone.toInt()
-        dateTimeOfVisitMill = newCustomer.date
+        messageId = (newCustomer.dateOf[0].date/1000/60).toInt() + newCustomer.telephone.toInt()
+        dateTimeOfVisitMill = newCustomer.dateOf[0].date
 
 
         if (ContextCompat.checkSelfPermission(

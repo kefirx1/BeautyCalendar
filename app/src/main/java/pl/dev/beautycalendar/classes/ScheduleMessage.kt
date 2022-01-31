@@ -19,8 +19,6 @@ class ScheduleMessage {
             putExtra(MessageReceiver.PHONE_EXTRA, phoneNumber)
         }
 
-
-
         val pendingIntent = PendingIntent.getBroadcast(
             applicationContext,
             messageId,
