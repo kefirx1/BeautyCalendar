@@ -5,14 +5,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.*
 import pl.dev.beautycalendar.adapter.InfoListAdapter
+import pl.dev.beautycalendar.classes.FirebaseData
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityCustomersListBinding
@@ -20,10 +19,7 @@ import pl.dev.beautycalendar.databinding.ActivityCustomersListBinding
 class CustomersListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCustomersListBinding
-    private lateinit var database: FirebaseDatabase
-    private lateinit var reference: DatabaseReference
-
-    val customersList: ArrayList<CustomerInfo> = ArrayList()
+    private lateinit var firebaseData: FirebaseData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +27,10 @@ class CustomersListActivity : AppCompatActivity() {
         binding = ActivityCustomersListBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
+        firebaseData = FirebaseData()
 
-        checkVisits()
+        firebaseData.getListOfVisits(this)
+
     }
 
     private fun getCustomerId(customerName: String): String {
@@ -86,7 +84,7 @@ class CustomersListActivity : AppCompatActivity() {
         val emptyList: ArrayList<VisitsDate> = ArrayList()
         var customerNewVisit = CustomerInfo(1, emptyList, "", "", "")
 
-        customersList.forEach {
+        MainActivity.customersList.forEach {
             if (it.telephone == customerId) {
                 customerNewVisit = it
             }
@@ -96,7 +94,7 @@ class CustomersListActivity : AppCompatActivity() {
 
     }
 
-    private fun setAutoCompletedInfo() {
+    fun setAutoCompletedInfo() {
         val customersNameList = getCustomersNameList()
         val adapter =
             ArrayAdapter(applicationContext, R.layout.simple_list_item_1, customersNameList)
@@ -120,59 +118,13 @@ class CustomersListActivity : AppCompatActivity() {
 
         val customersNameList: ArrayList<String> = ArrayList()
 
-        customersList.forEach {
+        MainActivity.customersList.forEach {
             customersNameList.add("${it.telephone} ${it.name} ${it.surname}")
         }
 
         return customersNameList
     }
 
-    private fun checkVisits() {
-        database = FirebaseDatabase.getInstance()
-        reference = database.getReference(MainActivity.userName)
 
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                Log.e("TAG", "Check")
-
-                snapshot.children.forEach { customer ->
-
-                    val listOfItems: ArrayList<Any> = ArrayList()
-
-                    customer.children.forEach {
-                        listOfItems.add(it.value!!)
-                    }
-
-                    val singleVisitsDate: ArrayList<VisitsDate> = ArrayList()
-
-                    val visitsDateRow = listOfItems[1] as ArrayList<*>
-
-                    visitsDateRow.forEach {
-                        val visitsDateRowMap = it as HashMap<*, *>
-                        val date = visitsDateRowMap["date"] as Long
-                        val service = visitsDateRowMap["service"] as String
-                        val visitsDate = VisitsDate(date, service)
-                        singleVisitsDate.add(visitsDate)
-                    }
-
-                    val singleCustomer = CustomerInfo(
-                        listOfItems[0].toString().toInt(),
-                        singleVisitsDate,
-                        listOfItems[2] as String,
-                        listOfItems[3] as String,
-                        listOfItems[4] as String,
-                    )
-
-                    customersList.add(singleCustomer)
-                }
-                setAutoCompletedInfo()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("TAG", "Failed to read value.", error.toException())
-            }
-        })
-    }
 
 }

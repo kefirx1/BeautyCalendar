@@ -19,19 +19,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import info.androidhive.fontawesome.FontTextView
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.R
+import pl.dev.beautycalendar.classes.DateOfVisits
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.receiver.MessageReceiver
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<EventsAdapter.ViewHandler>() {
 
     private lateinit var database: FirebaseDatabase
     private lateinit var reference: DatabaseReference
+
+    private val dateOfVisits = DateOfVisits()
 
     inner class ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -54,7 +53,7 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
         sortVisitsList()
 
         setExamDetails(holder, position)
-        holder.rowLayout.setOnLongClickListener{
+        holder.rowLayout.setOnLongClickListener {
 
 
             showDialog(holder, position)
@@ -65,13 +64,13 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
 
     }
 
-    private fun sortVisitsList(){
+    private fun sortVisitsList() {
         visitsList.sortBy {
-            it.dateOf[it.dateOf.size-1].date
+            it.dateOf[it.dateOf.size - 1].date
         }
     }
 
-    private fun showDialog(holder: ViewHandler, position: Int){
+    private fun showDialog(holder: ViewHandler, position: Int) {
 
         val dialog = Dialog(instance)
         dialog.requestWindowFeature(Window.FEATURE_OPTIONS_PANEL)
@@ -81,18 +80,18 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
         val callButton: Button = dialog.findViewById(R.id.callEventButton)
         val messageButton: Button = dialog.findViewById(R.id.messageEventButton)
         val cancelButton: Button = dialog.findViewById(R.id.cancelEventButton)
-        
-        callButton.setOnClickListener{
+
+        callButton.setOnClickListener {
             callToCustomer(position)
             dialog.dismiss()
             holder.modal.visibility = View.GONE
         }
-        messageButton.setOnClickListener{
+        messageButton.setOnClickListener {
             messageToCustomer(position)
             dialog.dismiss()
             holder.modal.visibility = View.GONE
         }
-        cancelButton.setOnClickListener{
+        cancelButton.setOnClickListener {
             cancelVisit(holder, position)
             dialog.dismiss()
             holder.modal.visibility = View.GONE
@@ -122,7 +121,8 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     private fun cancelVisit(holder: ViewHandler, position: Int) {
         Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
 
-        val messageId = (visitsList[position].dateOf[visitsList[position].dateOf.size-1].date / 1000 / 60).toInt() + visitsList[position].telephone.toInt()
+        val messageId =
+            (visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date / 1000 / 60).toInt() + visitsList[position].telephone.toInt()
 
         val intent = Intent(instance, MessageReceiver::class.java)
 
@@ -151,21 +151,9 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     @SuppressLint("SetTextI18n")
     private fun setExamDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            getTimeString(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
+            dateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
         holder.nameTextView.text =
             visitsList[position].name + " " + visitsList[position].surname
     }
 
-    private fun getTimeString(dateTimeMillis: Long): String {
-        val dateTimeOfVisit =
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTimeMillis), ZoneId.systemDefault())
-        val hour = dateTimeOfVisit.hour
-        var minute = dateTimeOfVisit.minute.toString()
-
-        if (dateTimeOfVisit.minute < 10) {
-            minute = "0$minute"
-        }
-
-        return "$hour:$minute"
-    }
 }

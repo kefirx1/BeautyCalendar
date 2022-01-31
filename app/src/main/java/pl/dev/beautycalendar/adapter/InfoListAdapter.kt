@@ -8,12 +8,15 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import pl.dev.beautycalendar.R
+import pl.dev.beautycalendar.classes.DateOfVisits
 import pl.dev.beautycalendar.data.VisitsDate
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerView.Adapter<InfoListAdapter.ViewHandler>() {
+
+    private val dateOfVisits = DateOfVisits()
 
     inner class ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -43,24 +46,9 @@ class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerVi
     @SuppressLint("SetTextI18n")
     private fun setVisitsDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            getDateTimeString(visitsList[position].date)
+            dateOfVisits.getStringTimeDate(visitsList[position].date)
         holder.serviceTextView.text =
             visitsList[position].service
     }
 
-    private fun getDateTimeString(dateTimeMillis: Long): String {
-        val dateTimeOfVisit =
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTimeMillis), ZoneId.systemDefault())
-        val year = dateTimeOfVisit.year
-        val month = dateTimeOfVisit.monthValue
-        val day = dateTimeOfVisit.dayOfMonth
-        val hour = dateTimeOfVisit.hour
-        var minute = dateTimeOfVisit.minute.toString()
-
-        if (dateTimeOfVisit.minute < 10) {
-            minute = "0$minute"
-        }
-
-        return "$hour:$minute - $day.$month.$year"
-    }
 }

@@ -6,15 +6,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.firebase.database.FirebaseDatabase
-import pl.dev.beautycalendar.MainActivity.Companion.userName
+import pl.dev.beautycalendar.classes.DateOfVisits
 import pl.dev.beautycalendar.classes.MakeMessage
 import pl.dev.beautycalendar.classes.ScheduleMessage
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityNewCustomerBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 class NewCustomerActivity : AppCompatActivity() {
 
@@ -22,6 +20,7 @@ class NewCustomerActivity : AppCompatActivity() {
     private lateinit var newCustomer: CustomerInfo
     private lateinit var makeMessage: MakeMessage
     private lateinit var scheduleMessage: ScheduleMessage
+    private lateinit var dateOfVisits: DateOfVisits
     private var phoneNumber = ""
     private var textMessage = ""
     private var dateTimeOfVisitMill = 0L
@@ -36,10 +35,10 @@ class NewCustomerActivity : AppCompatActivity() {
 
         scheduleMessage = ScheduleMessage()
         makeMessage = MakeMessage()
+        dateOfVisits = DateOfVisits()
 
         setView()
     }
-
 
     private fun setView() {
         binding.newCustomerTimePicker.setIs24HourView(true)
@@ -52,7 +51,8 @@ class NewCustomerActivity : AppCompatActivity() {
                 .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             val telephone = binding.telephoneEditText.text.toString()
             val service = binding.serviceEditText.text.toString()
-            val dateOfVisit = getDateOfVisitMillis()
+
+            val dateOfVisit = dateOfVisits.getDateOfVisitMillis(binding.newCustomerDatePicker, binding.newCustomerTimePicker)
 
             val visitsDate = VisitsDate(dateOfVisit, service)
             val visitsDateList: ArrayList<VisitsDate> = ArrayList()
@@ -70,10 +70,7 @@ class NewCustomerActivity : AppCompatActivity() {
 
     private fun addNewVisit(newCustomer: CustomerInfo) {
 
-        val database = FirebaseDatabase.getInstance()
-        val reference = database.getReference(userName)
-
-        reference.child(newCustomer.telephone).setValue(newCustomer)
+        MainActivity.reference.child(newCustomer.telephone).setValue(newCustomer)
 
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
 
@@ -127,21 +124,6 @@ class NewCustomerActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Nie zezwolno na wysyłanie sms", Toast.LENGTH_SHORT)
                 .show()
         }
-    }
-
-
-    private fun getDateOfVisitMillis(): Long {
-
-        val year = binding.newCustomerDatePicker.year
-        val month = binding.newCustomerDatePicker.month
-        val day = binding.newCustomerDatePicker.dayOfMonth
-        val hour = binding.newCustomerTimePicker.hour
-        val minute = binding.newCustomerTimePicker.minute
-
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day, hour, minute)
-
-        return calendar.timeInMillis
     }
 
 

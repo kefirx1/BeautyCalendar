@@ -1,28 +1,18 @@
 package pl.dev.beautycalendar.adapter
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.R
+import pl.dev.beautycalendar.classes.DateOfVisits
 import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.receiver.MessageReceiver
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
-class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<ViewPagerUpcomingAdapter.Pager2ViewHandler>() {
+class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>): RecyclerView.Adapter<ViewPagerUpcomingAdapter.Pager2ViewHandler>() {
+
+    private val dateOfVisits = DateOfVisits()
 
     inner class Pager2ViewHandler(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -54,18 +44,7 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>, 
     private fun setExamDetails(holder: Pager2ViewHandler, position: Int){
         holder.nameTextView.text = visitsList[position].name + " " + visitsList[position].surname
         holder.telephoneTextView.text = visitsList[position].telephone
-        holder.serviceTextView.text =  getTimeString(visitsList[position].dateOf[visitsList[position].dateOf.size-1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size-1].service
+        holder.serviceTextView.text = dateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size-1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size-1].service
     }
 
-    private fun getTimeString(dateTimeMillis: Long): String {
-        val dateTimeOfVisit = LocalDateTime.ofInstant(Instant.ofEpochMilli(dateTimeMillis), ZoneId.systemDefault())
-        val hour = dateTimeOfVisit.hour
-        var minute = dateTimeOfVisit.minute.toString()
-
-        if(dateTimeOfVisit.minute<10){
-            minute = "0$minute"
-        }
-
-        return "$hour:$minute"
-    }
 }

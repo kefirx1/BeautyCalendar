@@ -7,11 +7,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
-import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
+import pl.dev.beautycalendar.classes.FirebaseData
 import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -25,11 +25,12 @@ class MainActivity : AppCompatActivity() {
         val customersList: ArrayList<CustomerInfo> = ArrayList()
         val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
         val events: ArrayList<EventDay> = ArrayList()
+        val database = FirebaseDatabase.getInstance()
+        var reference = database.getReference(userName)
     }
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var database: FirebaseDatabase
-    private lateinit var reference: DatabaseReference
+    private lateinit var firebaseData: FirebaseData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        firebaseData = FirebaseData()
 
         setUserName()
 
@@ -47,13 +50,13 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("TAG", "On resume")
 
-
         clearEvents()
 
         if (userName != "") {
-            setListeners()
 
-            checkVisits()
+            reference = database.getReference(userName)
+            firebaseData.getListOfVisits(this)
+            setListeners()
             setViewPager()
             setCalendar()
             setCalendarEventsListener()
@@ -130,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             setUserName()
         }
 
-        binding.customersListButton.setOnClickListener{
+        binding.customersListButton.setOnClickListener {
             Log.e("TAG", "Customers list")
             resetModals()
             val intent = Intent(this, CustomersListActivity::class.java)
@@ -144,7 +147,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun setViewPager() {
+    fun setViewPager() {
 
         val currentDay = Calendar.getInstance()
         val currentDayEnd = Calendar.getInstance()
@@ -186,71 +189,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.upcomingVisitsViewPager.adapter =
-            ViewPagerUpcomingAdapter(customerUpcomingList, applicationContext, this)
+            ViewPagerUpcomingAdapter(customerUpcomingList)
         binding.upcomingCircleIndicator3.setViewPager(binding.upcomingVisitsViewPager)
 
     }
 
 
-    private fun checkVisits() {
-        database = FirebaseDatabase.getInstance()
-        reference = database.getReference(userName)
-
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                clearEvents()
-
-                Log.e("TAG", "Check")
-
-
-                snapshot.children.forEach { customer ->
-
-                    val listOfItems: ArrayList<Any> = ArrayList()
-
-                    customer.children.forEach {
-                        listOfItems.add(it.value!!)
-                    }
-
-                    val singleVisitsDate: ArrayList<VisitsDate> = ArrayList()
-
-                    val visitsDateRow = listOfItems[1] as ArrayList<*>
-
-                    visitsDateRow.forEach {
-                        val visitsDateRowMap = it as HashMap<*, *>
-                        val date = visitsDateRowMap["date"] as Long
-                        val service = visitsDateRowMap["service"] as String
-                        val visitsDate = VisitsDate(date, service)
-                        singleVisitsDate.add(visitsDate)
-                    }
-
-                    val singleCustomer = CustomerInfo(
-                        listOfItems[0].toString().toInt(),
-                        singleVisitsDate,
-                        listOfItems[2] as String,
-                        listOfItems[3] as String,
-                        listOfItems[4] as String,
-                    )
-
-                    customersList.add(singleCustomer)
-                }
-                setViewPager()
-                setCalendar()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("TAG", "Failed to read value.", error.toException())
-            }
-        })
-    }
-
-    private fun clearEvents() {
+    fun clearEvents() {
         customersList.clear()
         customerToEvent.clear()
         events.clear()
     }
 
 
-    private fun setCalendar() {
+    fun setCalendar() {
 
         Log.e("TAG", "Calendar")
 

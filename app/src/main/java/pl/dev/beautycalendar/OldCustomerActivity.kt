@@ -3,15 +3,14 @@ package pl.dev.beautycalendar
 import android.R.layout
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-import com.google.firebase.database.*
+import pl.dev.beautycalendar.classes.DateOfVisits
+import pl.dev.beautycalendar.classes.FirebaseData
 import pl.dev.beautycalendar.classes.MakeMessage
 import pl.dev.beautycalendar.classes.ScheduleMessage
 import pl.dev.beautycalendar.data.CustomerInfo
@@ -23,11 +22,10 @@ import kotlin.collections.ArrayList
 class OldCustomerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOldCustomerBinding
-    private lateinit var database: FirebaseDatabase
-    private lateinit var reference: DatabaseReference
-    private lateinit var listOfCustomers: ArrayList<CustomerInfo>
     private lateinit var makeMessage: MakeMessage
     private lateinit var scheduleMessage: ScheduleMessage
+    private lateinit var firebaseData: FirebaseData
+    private lateinit var dateOfVisits: DateOfVisits
 
     private var phoneNumber = ""
     private var textMessage = ""
@@ -42,53 +40,11 @@ class OldCustomerActivity : AppCompatActivity() {
 
         makeMessage = MakeMessage()
         scheduleMessage = ScheduleMessage()
+        firebaseData = FirebaseData()
+        dateOfVisits = DateOfVisits()
 
-        database = FirebaseDatabase.getInstance()
-        reference = database.getReference(MainActivity.userName)
+        firebaseData.getListOfVisits(this)
 
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                listOfCustomers = ArrayList()
-
-                snapshot.children.forEach { customer ->
-
-                    val listOfItems: ArrayList<Any> = ArrayList()
-
-                    customer.children.forEach{
-                        listOfItems.add(it.value!!)
-                    }
-
-                    val singleVisitsDate: ArrayList<VisitsDate> = ArrayList()
-
-                    val visitsDateRow = listOfItems[1] as ArrayList<*>
-
-                    visitsDateRow.forEach{
-                        val visitsDateRowMap = it as HashMap<*, *>
-                        val date = visitsDateRowMap["date"] as Long
-                        val service = visitsDateRowMap["service"] as String
-                        val visitsDate = VisitsDate(date, service)
-                        singleVisitsDate.add(visitsDate)
-                    }
-
-                    val singleCustomer = CustomerInfo(
-                        listOfItems[0].toString().toInt(),
-                        singleVisitsDate,
-                        listOfItems[2] as String,
-                        listOfItems[3] as String,
-                        listOfItems[4] as String,
-                    )
-
-                    listOfCustomers.add(singleCustomer)
-                }
-
-                setAutoCompletedInfo()
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w("TAG", "Failed to read value.", error.toException())
-            }
-        })
 
         setView()
 
@@ -109,7 +65,7 @@ class OldCustomerActivity : AppCompatActivity() {
                 }
             }
 
-            val dateOfVisit = getDateOfVisitMillis()
+            val dateOfVisit = dateOfVisits.getDateOfVisitMillis(binding.oldCustomerDatePicker, binding.oldCustomerTimePicker)
 
             val customerId = getCustomerId(customerName)
 
@@ -131,7 +87,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
     private fun addNewVisit(customer: CustomerInfo) {
 
-        reference.child(customer.telephone).setValue(customer)
+        MainActivity.reference.child(customer.telephone).setValue(customer)
 
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
 
@@ -183,7 +139,7 @@ class OldCustomerActivity : AppCompatActivity() {
         val emptyList: ArrayList<VisitsDate> = ArrayList()
         var customerNewVisit = CustomerInfo(1, emptyList , "", "", "")
 
-        listOfCustomers.forEach {
+        MainActivity.customersList.forEach {
             if (it.telephone == customerId) {
                 customerNewVisit = it
             }
@@ -198,7 +154,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
     }
 
-    private fun setAutoCompletedInfo(){
+    fun setAutoCompletedInfo(){
         val customersNameList = getCustomersNameList()
         val adapter = ArrayAdapter(applicationContext, layout.simple_list_item_1, customersNameList)
         binding.customerSpinner.setAdapter(adapter)
@@ -221,7 +177,7 @@ class OldCustomerActivity : AppCompatActivity() {
         val emptyList: ArrayList<VisitsDate> = ArrayList()
         var customer = CustomerInfo(1, emptyList , "", "", "")
 
-        listOfCustomers.forEach {
+        MainActivity.customersList.forEach {
             if (it.telephone == customerId) {
                 customer = it
             }
@@ -238,26 +194,11 @@ class OldCustomerActivity : AppCompatActivity() {
 
         val customersNameList: ArrayList<String> = ArrayList()
 
-        listOfCustomers.forEach {
+        MainActivity.customersList.forEach {
             customersNameList.add("${it.telephone} ${it.name} ${it.surname}")
         }
 
         return customersNameList
     }
-
-    private fun getDateOfVisitMillis(): Long {
-
-        val year = binding.oldCustomerDatePicker.year
-        val month = binding.oldCustomerDatePicker.month
-        val day = binding.oldCustomerDatePicker.dayOfMonth
-        val hour = binding.oldCustomerTimePicker.hour
-        val minute = binding.oldCustomerTimePicker.minute
-
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day, hour, minute)
-
-        return calendar.timeInMillis
-    }
-
 
 }
