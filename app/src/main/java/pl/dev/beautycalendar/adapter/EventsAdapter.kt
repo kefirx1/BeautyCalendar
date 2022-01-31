@@ -74,18 +74,14 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
     private fun showDialog(holder: ViewHandler, position: Int){
 
         val dialog = Dialog(instance)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.requestWindowFeature(Window.FEATURE_OPTIONS_PANEL)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.events_long_dialog)
 
-        val backButton: FontTextView = dialog.findViewById(R.id.eventVisitsDialogBackButton)
         val callButton: Button = dialog.findViewById(R.id.callEventButton)
         val messageButton: Button = dialog.findViewById(R.id.messageEventButton)
         val cancelButton: Button = dialog.findViewById(R.id.cancelEventButton)
-
-        backButton.setOnClickListener{
-            dialog.dismiss()
-        }
+        
         callButton.setOnClickListener{
             callToCustomer(position)
             dialog.dismiss()

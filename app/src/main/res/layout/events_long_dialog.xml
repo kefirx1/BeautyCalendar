@@ -3,52 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="wrap_content"
-    android:padding="10dp">
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="2dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <info.androidhive.fontawesome.FontTextView
-            android:id="@+id/eventVisitsDialogBackButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fa_chevron_left_solid"
-            android:textAlignment="viewEnd"
-            android:textColor="@color/fuchsia"
-            android:textSize="40sp"
-            app:solid_icon="true"
-            tools:ignore="MissingClass" />
-    </LinearLayout>
+    android:layout_height="150dp"
+    android:padding="10dp"
+    >
 
     <Button
         android:id="@+id/callEventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:background="@drawable/spinner"
+
+        android:layout_marginTop="5dp"
         android:padding="5dp"
         android:text="ZADZWOŃ"
 
         app:layout_constraintBottom_toTopOf="@+id/cancelEventButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.24"
+        app:layout_constraintHorizontal_bias="0.245"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194" />
 
     <Button
         android:id="@+id/messageEventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
         android:background="@drawable/spinner"
         android:padding="5dp"
         android:text="WIADOMOŚĆ"
@@ -56,20 +37,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/callEventButton"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/cancelEventButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/spinner"
         android:padding="5dp"
         android:text="ODWOŁAJ WIZYTĘ"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/messageEventButton"
         app:layout_constraintVertical_bias="1.0" />
