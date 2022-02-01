@@ -14,7 +14,7 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>):
 
     private val dateOfVisits = DateOfVisits()
 
-    inner class Pager2ViewHandler(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class Pager2ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val nameTextView: TextView = itemView.findViewById(R.id.eventPageNameTextView)
         val telephoneTextView: TextView = itemView.findViewById(R.id.eventPageTelephoneTextView)
@@ -22,17 +22,19 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>):
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Pager2ViewHandler {
-        return Pager2ViewHandler(LayoutInflater.from(parent.context).inflate(R.layout.visit_info_page, parent, false))
+        return Pager2ViewHandler(
+            LayoutInflater.from(parent.context).inflate(R.layout.visit_info_page, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: Pager2ViewHandler, position: Int) {
         sortVisitsList()
-        setExamDetails(holder, position)
+        setVisitsDetails(holder, position)
     }
 
-    private fun sortVisitsList(){
+    private fun sortVisitsList() {
         visitsList.sortBy {
-            it.dateOf[it.dateOf.size-1].date
+            it.dateOf[it.dateOf.size - 1].date
         }
     }
 
@@ -41,10 +43,11 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>):
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setExamDetails(holder: Pager2ViewHandler, position: Int){
+    private fun setVisitsDetails(holder: Pager2ViewHandler, position: Int) {
         holder.nameTextView.text = visitsList[position].name + " " + visitsList[position].surname
         holder.telephoneTextView.text = visitsList[position].telephone
-        holder.serviceTextView.text = dateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size-1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size-1].service
+        holder.serviceTextView.text =
+            dateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
     }
 
 }

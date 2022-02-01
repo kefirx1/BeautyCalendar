@@ -5,14 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import pl.dev.beautycalendar.R
 import pl.dev.beautycalendar.classes.DateOfVisits
 import pl.dev.beautycalendar.data.VisitsDate
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerView.Adapter<InfoListAdapter.ViewHandler>() {
 

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.dev.beautycalendar.adapter.InfoListAdapter
+import pl.dev.beautycalendar.classes.Customer
 import pl.dev.beautycalendar.classes.FirebaseData
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
@@ -33,18 +34,11 @@ class CustomersListActivity : AppCompatActivity() {
 
     }
 
-    private fun getCustomerId(customerName: String): String {
-
-        val indexOfFirstSpace = customerName.indexOf(" ")
-
-        return customerName.substring(0, indexOfFirstSpace)
-    }
-
     @SuppressLint("SetTextI18n")
     private fun setView() {
         val customerName = binding.customersListAutoComplete.text.toString()
-        val customerId = getCustomerId(customerName)
-        val customer = getCustomer(customerId)
+        val customerId = Customer.getCustomerId(customerName)
+        val customer = Customer.getCustomer(customerId)
 
 
         binding.customersListName.text = customer.name + " " + customer.surname
@@ -77,21 +71,6 @@ class CustomersListActivity : AppCompatActivity() {
         val dialIntent = Intent(Intent.ACTION_DIAL)
         dialIntent.data = Uri.parse("tel:" + customer.telephone)
         startActivity(dialIntent)
-    }
-
-    private fun getCustomer(customerId: String): CustomerInfo {
-
-        val emptyList: ArrayList<VisitsDate> = ArrayList()
-        var customerNewVisit = CustomerInfo(1, emptyList, "", "", "")
-
-        MainActivity.customersList.forEach {
-            if (it.telephone == customerId) {
-                customerNewVisit = it
-            }
-        }
-
-        return customerNewVisit
-
     }
 
     fun setAutoCompletedInfo() {

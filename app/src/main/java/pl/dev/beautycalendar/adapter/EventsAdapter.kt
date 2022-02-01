@@ -1,36 +1,24 @@
 package pl.dev.beautycalendar.adapter
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.Dialog
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.R
+import pl.dev.beautycalendar.classes.DashboardDialog
 import pl.dev.beautycalendar.classes.DateOfVisits
 import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.receiver.MessageReceiver
 
-class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<EventsAdapter.ViewHandler>() {
-
-    private lateinit var database: FirebaseDatabase
-    private lateinit var reference: DatabaseReference
+class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<EventsAdapter.ViewHandler>() {
 
     private val dateOfVisits = DateOfVisits()
+    private val dashboardDialog = DashboardDialog(visitsList, applicationContext, instance)
 
     inner class ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -55,13 +43,10 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
         setExamDetails(holder, position)
         holder.rowLayout.setOnLongClickListener {
 
-
-            showDialog(holder, position)
-
+            dashboardDialog.showDialog(holder, position)
 
             true
         }
-
     }
 
     private fun sortVisitsList() {
@@ -70,82 +55,8 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, private val
         }
     }
 
-    private fun showDialog(holder: ViewHandler, position: Int) {
-
-        val dialog = Dialog(instance)
-        dialog.requestWindowFeature(Window.FEATURE_OPTIONS_PANEL)
-        dialog.setCancelable(true)
-        dialog.setContentView(R.layout.events_long_dialog)
-
-        val callButton: Button = dialog.findViewById(R.id.callEventButton)
-        val messageButton: Button = dialog.findViewById(R.id.messageEventButton)
-        val cancelButton: Button = dialog.findViewById(R.id.cancelEventButton)
-
-        callButton.setOnClickListener {
-            callToCustomer(position)
-            dialog.dismiss()
-            holder.modal.visibility = View.GONE
-        }
-        messageButton.setOnClickListener {
-            messageToCustomer(position)
-            dialog.dismiss()
-            holder.modal.visibility = View.GONE
-        }
-        cancelButton.setOnClickListener {
-            cancelVisit(holder, position)
-            dialog.dismiss()
-            holder.modal.visibility = View.GONE
-        }
-
-        dialog.show()
-    }
-
-    private fun messageToCustomer(position: Int) {
-        val messageIntent = Intent(Intent.ACTION_VIEW)
-        messageIntent.type = "vnd.android-dir/mms-sms"
-        messageIntent.putExtra("address", visitsList[position].telephone)
-        instance.startActivity(messageIntent)
-    }
-
-    private fun callToCustomer(position: Int) {
-        val dialIntent = Intent(Intent.ACTION_DIAL)
-        dialIntent.data = Uri.parse("tel:" + visitsList[position].telephone)
-        instance.startActivity(dialIntent)
-    }
-
     override fun getItemCount(): Int {
         return visitsList.size
-    }
-
-
-    private fun cancelVisit(holder: ViewHandler, position: Int) {
-        Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()
-
-        val messageId =
-            (visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date / 1000 / 60).toInt() + visitsList[position].telephone.toInt()
-
-        val intent = Intent(instance, MessageReceiver::class.java)
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            messageId,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarmManager.cancel(pendingIntent)
-
-        database = FirebaseDatabase.getInstance()
-        reference = database.getReference(MainActivity.userName)
-
-        val customer = visitsList[position]
-
-        customer.active = 0
-
-        reference.child(customer.telephone).setValue(customer)
-        holder.modal.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")

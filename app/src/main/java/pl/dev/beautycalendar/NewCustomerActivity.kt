@@ -75,8 +75,8 @@ class NewCustomerActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
 
         phoneNumber = "+48" + newCustomer.telephone
-        textMessage = makeMessage.getMessage(newCustomer)
-        messageId = (newCustomer.dateOf[0].date/1000/60).toInt() + newCustomer.telephone.toInt()
+        textMessage = makeMessage.getMessageString(newCustomer)
+        messageId = makeMessage.getMessageId(newCustomer)
         dateTimeOfVisitMill = newCustomer.dateOf[0].date
 
 

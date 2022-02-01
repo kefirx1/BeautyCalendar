@@ -9,6 +9,26 @@ import java.util.*
 
 class DateOfVisits {
 
+    fun getDayBeforeMillis(dateTimeOfVisitMill: Long): Long {
+        val dateTimeOfVisit = LocalDateTime.ofInstant(
+            Instant.ofEpochMilli(dateTimeOfVisitMill),
+            ZoneId.systemDefault()
+        )
+
+        val calendar = Calendar.getInstance()
+
+        calendar.set(
+            dateTimeOfVisit.year,
+            dateTimeOfVisit.monthValue - 1,
+            dateTimeOfVisit.dayOfMonth - 1,
+            15,
+            0,
+            0
+        )
+        return calendar.timeInMillis
+    }
+
+
     fun getDateOfVisitMillis(customerDatePicker: DatePicker, customerTimePicker: TimePicker): Long {
 
         val year = customerDatePicker.year

@@ -9,14 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-import pl.dev.beautycalendar.classes.DateOfVisits
-import pl.dev.beautycalendar.classes.FirebaseData
-import pl.dev.beautycalendar.classes.MakeMessage
-import pl.dev.beautycalendar.classes.ScheduleMessage
+import pl.dev.beautycalendar.classes.*
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityOldCustomerBinding
-import java.util.*
 import kotlin.collections.ArrayList
 
 class OldCustomerActivity : AppCompatActivity() {
@@ -67,22 +63,15 @@ class OldCustomerActivity : AppCompatActivity() {
 
             val dateOfVisit = dateOfVisits.getDateOfVisitMillis(binding.oldCustomerDatePicker, binding.oldCustomerTimePicker)
 
-            val customerId = getCustomerId(customerName)
+            val customerId = Customer.getCustomerId(customerName)
 
             if (customerName.isNotBlank() && service.isNotBlank() && customerId.isNotBlank()) {
-                addNewVisit(getCustomer(customerId, service, dateOfVisit))
+                addNewVisit(Customer.getCustomer(customerId, service, dateOfVisit))
             } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
             }
 
         }
-    }
-
-    private fun getCustomerId(customerName: String): String {
-
-        val indexOfFirstSpace = customerName.indexOf(" ")
-
-        return customerName.substring(0, indexOfFirstSpace)
     }
 
     private fun addNewVisit(customer: CustomerInfo) {
@@ -92,8 +81,8 @@ class OldCustomerActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
 
         phoneNumber = "+48" + customer.telephone
-        textMessage = makeMessage.getMessage(customer)
-        messageId = (customer.dateOf[customer.dateOf.size-1].date/1000/60).toInt() + customer.telephone.toInt()
+        textMessage = makeMessage.getMessageString(customer)
+        messageId = makeMessage.getMessageId(customer)
         dateTimeOfVisitMill = customer.dateOf[customer.dateOf.size-1].date
 
         if (ContextCompat.checkSelfPermission(
@@ -133,27 +122,6 @@ class OldCustomerActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun getCustomer(customerId: String, service: String, dateOfVisit: Long): CustomerInfo {
-
-        val emptyList: ArrayList<VisitsDate> = ArrayList()
-        var customerNewVisit = CustomerInfo(1, emptyList , "", "", "")
-
-        MainActivity.customersList.forEach {
-            if (it.telephone == customerId) {
-                customerNewVisit = it
-            }
-        }
-
-
-        val newVisitDate = VisitsDate(dateOfVisit, service)
-
-        customerNewVisit.active = 1
-        customerNewVisit.dateOf.add(newVisitDate)
-        return customerNewVisit
-
-    }
-
     fun setAutoCompletedInfo(){
         val customersNameList = getCustomersNameList()
         val adapter = ArrayAdapter(applicationContext, layout.simple_list_item_1, customersNameList)
@@ -172,7 +140,7 @@ class OldCustomerActivity : AppCompatActivity() {
     private fun setLastService() {
 
         val customerName = binding.customerSpinner.text.toString()
-        val customerId = getCustomerId(customerName)
+        val customerId = Customer.getCustomerId(customerName)
 
         val emptyList: ArrayList<VisitsDate> = ArrayList()
         var customer = CustomerInfo(1, emptyList , "", "", "")

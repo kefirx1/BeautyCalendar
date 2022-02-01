@@ -14,7 +14,6 @@ import java.util.HashMap
 class FirebaseData {
 
 
-
     fun getListOfVisits(instance: Activity) {
 
         when (instance.componentName.shortClassName) {
