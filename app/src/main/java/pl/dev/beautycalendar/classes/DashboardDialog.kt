@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -18,7 +17,7 @@ import pl.dev.beautycalendar.receiver.MessageReceiver
 
 class DashboardDialog(private val visitsList: ArrayList<CustomerInfo>, private val applicationContext: Context, private val instance: MainActivity) {
 
-    val makeMessage = MakeMessage()
+    private val makeMessage = MakeMessage()
 
     fun showDialog(holder: EventsAdapter.ViewHandler, position: Int) {
 
@@ -32,12 +31,12 @@ class DashboardDialog(private val visitsList: ArrayList<CustomerInfo>, private v
         val cancelButton: Button = dialog.findViewById(R.id.cancelEventButton)
 
         callButton.setOnClickListener {
-            callToCustomer(position)
+            Customer.callToCustomer(visitsList[position], instance)
             dialog.dismiss()
             holder.modal.visibility = View.GONE
         }
         messageButton.setOnClickListener {
-            messageToCustomer(position)
+            Customer.messageToCustomer(visitsList[position], instance)
             dialog.dismiss()
             holder.modal.visibility = View.GONE
         }
@@ -50,18 +49,6 @@ class DashboardDialog(private val visitsList: ArrayList<CustomerInfo>, private v
         dialog.show()
     }
 
-    private fun messageToCustomer(position: Int) {
-        val messageIntent = Intent(Intent.ACTION_VIEW)
-        messageIntent.type = "vnd.android-dir/mms-sms"
-        messageIntent.putExtra("address", visitsList[position].telephone)
-        instance.startActivity(messageIntent)
-    }
-
-    private fun callToCustomer(position: Int) {
-        val dialIntent = Intent(Intent.ACTION_DIAL)
-        dialIntent.data = Uri.parse("tel:" + visitsList[position].telephone)
-        instance.startActivity(dialIntent)
-    }
 
     private fun cancelVisit(holder: EventsAdapter.ViewHandler, position: Int) {
         Toast.makeText(applicationContext, "Wizyta odwołana", Toast.LENGTH_SHORT).show()

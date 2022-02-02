@@ -1,6 +1,8 @@
 package pl.dev.beautycalendar.classes
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
@@ -40,7 +42,6 @@ object Customer {
         return customerNewVisit
     }
 
-
     fun getCustomerId(customerName: String): String {
 
         val indexOfFirstSpace = customerName.indexOf(" ")
@@ -48,6 +49,29 @@ object Customer {
         return customerName.substring(0, indexOfFirstSpace)
     }
 
+    fun getCustomersNameList(): ArrayList<String> {
+
+        val customersNameList: ArrayList<String> = ArrayList()
+
+        MainActivity.customersList.forEach {
+            customersNameList.add("${it.telephone} ${it.name} ${it.surname}")
+        }
+
+        return customersNameList
+    }
+
+    fun messageToCustomer(customer: CustomerInfo, instance: Activity) {
+        val messageIntent = Intent(Intent.ACTION_VIEW)
+        messageIntent.type = "vnd.android-dir/mms-sms"
+        messageIntent.putExtra("address", customer.telephone)
+        instance.startActivity(messageIntent)
+    }
+
+    fun callToCustomer(customer: CustomerInfo, instance: Activity) {
+        val dialIntent = Intent(Intent.ACTION_DIAL)
+        dialIntent.data = Uri.parse("tel:" + customer.telephone)
+        instance.startActivity(dialIntent)
+    }
 
 
 }

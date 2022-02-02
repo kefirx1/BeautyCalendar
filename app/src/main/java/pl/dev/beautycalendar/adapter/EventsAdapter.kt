@@ -17,7 +17,6 @@ import pl.dev.beautycalendar.data.CustomerInfo
 
 class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<EventsAdapter.ViewHandler>() {
 
-    private val dateOfVisits = DateOfVisits()
     private val dashboardDialog = DashboardDialog(visitsList, applicationContext, instance)
 
     inner class ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -62,7 +61,7 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, application
     @SuppressLint("SetTextI18n")
     private fun setExamDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            dateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
+            DateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
         holder.nameTextView.text =
             visitsList[position].name + " " + visitsList[position].surname
     }

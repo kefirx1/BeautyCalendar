@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-class DateOfVisits {
+object DateOfVisits {
 
     fun getDayBeforeMillis(dateTimeOfVisitMill: Long): Long {
         val dateTimeOfVisit = LocalDateTime.ofInstant(

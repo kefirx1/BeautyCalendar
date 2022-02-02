@@ -12,7 +12,6 @@ import pl.dev.beautycalendar.data.VisitsDate
 
 class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerView.Adapter<InfoListAdapter.ViewHandler>() {
 
-    private val dateOfVisits = DateOfVisits()
 
     inner class ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -42,7 +41,7 @@ class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerVi
     @SuppressLint("SetTextI18n")
     private fun setVisitsDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            dateOfVisits.getStringTimeDate(visitsList[position].date)
+            DateOfVisits.getStringTimeDate(visitsList[position].date)
         holder.serviceTextView.text =
             visitsList[position].service
     }

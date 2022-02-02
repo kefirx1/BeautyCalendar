@@ -23,14 +23,16 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var userName = ""
         val customersList: ArrayList<CustomerInfo> = ArrayList()
-        val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
-        val events: ArrayList<EventDay> = ArrayList()
         val database = FirebaseDatabase.getInstance()
         var reference = database.getReference(userName)
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseData: FirebaseData
+
+    private val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
+    private val events: ArrayList<EventDay> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         clearEvents()
 
         if (userName != "") {
-
             reference = database.getReference(userName)
             firebaseData.getListOfVisits(this)
             setListeners()
@@ -155,7 +156,6 @@ class MainActivity : AppCompatActivity() {
         val currentMonth = currentDay.get(Calendar.MONTH)
         val currentYear = currentDay.get(Calendar.YEAR)
         val currentHour = currentDay.get(Calendar.HOUR_OF_DAY)
-
 
         currentDay.set(currentYear, currentMonth, currentDayOfMonth, 0, 0, 0)
         currentDayEnd.set(currentYear, currentMonth, currentDayOfMonth, 23, 59, 59)

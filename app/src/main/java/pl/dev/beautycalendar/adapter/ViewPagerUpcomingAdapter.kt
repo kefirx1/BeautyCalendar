@@ -12,8 +12,6 @@ import pl.dev.beautycalendar.data.CustomerInfo
 
 class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>): RecyclerView.Adapter<ViewPagerUpcomingAdapter.Pager2ViewHandler>() {
 
-    private val dateOfVisits = DateOfVisits()
-
     inner class Pager2ViewHandler(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val nameTextView: TextView = itemView.findViewById(R.id.eventPageNameTextView)
@@ -47,7 +45,7 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>):
         holder.nameTextView.text = visitsList[position].name + " " + visitsList[position].surname
         holder.telephoneTextView.text = visitsList[position].telephone
         holder.serviceTextView.text =
-            dateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
+            DateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
     }
 
 }

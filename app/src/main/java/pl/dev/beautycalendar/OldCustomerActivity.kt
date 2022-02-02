@@ -6,22 +6,18 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import pl.dev.beautycalendar.classes.*
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityOldCustomerBinding
-import kotlin.collections.ArrayList
 
 class OldCustomerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityOldCustomerBinding
-    private lateinit var makeMessage: MakeMessage
     private lateinit var scheduleMessage: ScheduleMessage
     private lateinit var firebaseData: FirebaseData
-    private lateinit var dateOfVisits: DateOfVisits
+    private lateinit var newVisit: NewVisit
 
     private var phoneNumber = ""
     private var textMessage = ""
@@ -34,10 +30,8 @@ class OldCustomerActivity : AppCompatActivity() {
         binding = ActivityOldCustomerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        makeMessage = MakeMessage()
         scheduleMessage = ScheduleMessage()
         firebaseData = FirebaseData()
-        dateOfVisits = DateOfVisits()
 
         firebaseData.getListOfVisits(this)
 
@@ -45,7 +39,6 @@ class OldCustomerActivity : AppCompatActivity() {
         setView()
 
     }
-
 
     private fun setView() {
         binding.oldCustomerTimePicker.setIs24HourView(true)
@@ -55,57 +48,31 @@ class OldCustomerActivity : AppCompatActivity() {
             val customerName = binding.customerSpinner.text.toString()
             var service = binding.serviceEditText.text.toString()
 
-            if(service.isBlank()){
-                if(binding.serviceEditText.hint.toString().isNotBlank()){
+            if (service.isBlank()) {
+                if (binding.serviceEditText.hint.toString().isNotBlank()) {
                     service = binding.serviceEditText.hint.toString()
                 }
             }
 
-            val dateOfVisit = dateOfVisits.getDateOfVisitMillis(binding.oldCustomerDatePicker, binding.oldCustomerTimePicker)
+            val dateOfVisit = DateOfVisits.getDateOfVisitMillis(
+                binding.oldCustomerDatePicker,
+                binding.oldCustomerTimePicker
+            )
 
             val customerId = Customer.getCustomerId(customerName)
 
             if (customerName.isNotBlank() && service.isNotBlank() && customerId.isNotBlank()) {
-                addNewVisit(Customer.getCustomer(customerId, service, dateOfVisit))
+                newVisit.addNewVisit(
+                    Customer.getCustomer(customerId, service, dateOfVisit),
+                    this,
+                    applicationContext
+                )
             } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show()
             }
 
         }
     }
-
-    private fun addNewVisit(customer: CustomerInfo) {
-
-        MainActivity.reference.child(customer.telephone).setValue(customer)
-
-        Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
-
-        phoneNumber = "+48" + customer.telephone
-        textMessage = makeMessage.getMessageString(customer)
-        messageId = makeMessage.getMessageId(customer)
-        dateTimeOfVisitMill = customer.dateOf[customer.dateOf.size-1].date
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.SEND_SMS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-
-            scheduleMessage.setScheduleMessage(applicationContext, this, textMessage, phoneNumber, messageId, dateTimeOfVisitMill)
-
-        } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.SEND_SMS),
-                100
-            )
-        }
-
-        this.finish()
-    }
-
-
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -122,19 +89,18 @@ class OldCustomerActivity : AppCompatActivity() {
         }
     }
 
-    fun setAutoCompletedInfo(){
-        val customersNameList = getCustomersNameList()
+    fun setAutoCompletedInfo() {
+        val customersNameList = Customer.getCustomersNameList()
         val adapter = ArrayAdapter(applicationContext, layout.simple_list_item_1, customersNameList)
         binding.customerSpinner.setAdapter(adapter)
 
         binding.customerSpinner.doAfterTextChanged {
             if (it != null) {
                 if (it.length > 9) {
-                   setLastService()
+                    setLastService()
                 }
             }
         }
-
     }
 
     private fun setLastService() {
@@ -143,7 +109,7 @@ class OldCustomerActivity : AppCompatActivity() {
         val customerId = Customer.getCustomerId(customerName)
 
         val emptyList: ArrayList<VisitsDate> = ArrayList()
-        var customer = CustomerInfo(1, emptyList , "", "", "")
+        var customer = CustomerInfo(1, emptyList, "", "", "")
 
         MainActivity.customersList.forEach {
             if (it.telephone == customerId) {
@@ -151,22 +117,10 @@ class OldCustomerActivity : AppCompatActivity() {
             }
         }
 
-        val lastService = customer.dateOf[customer.dateOf.size-1].service
+        val lastService = customer.dateOf[customer.dateOf.size - 1].service
 
         binding.serviceEditText.hint = lastService
 
-    }
-
-
-    private fun getCustomersNameList(): ArrayList<String> {
-
-        val customersNameList: ArrayList<String> = ArrayList()
-
-        MainActivity.customersList.forEach {
-            customersNameList.add("${it.telephone} ${it.name} ${it.surname}")
-        }
-
-        return customersNameList
     }
 
 }

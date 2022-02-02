@@ -1,9 +1,7 @@
 package pl.dev.beautycalendar
 
-import android.R
+import android.R.layout
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -13,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import pl.dev.beautycalendar.adapter.InfoListAdapter
 import pl.dev.beautycalendar.classes.Customer
 import pl.dev.beautycalendar.classes.FirebaseData
-import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.data.VisitsDate
 import pl.dev.beautycalendar.databinding.ActivityCustomersListBinding
 
 class CustomersListActivity : AppCompatActivity() {
@@ -40,7 +36,6 @@ class CustomersListActivity : AppCompatActivity() {
         val customerId = Customer.getCustomerId(customerName)
         val customer = Customer.getCustomer(customerId)
 
-
         binding.customersListName.text = customer.name + " " + customer.surname
         binding.customersListTelephone.text = customer.telephone
 
@@ -52,31 +47,18 @@ class CustomersListActivity : AppCompatActivity() {
         binding.customersListRecyclerView.layoutManager = LinearLayoutManager(this)
 
         binding.callCustomerButton.setOnClickListener {
-            callToCustomer(customer)
+            Customer.callToCustomer(customer, this)
         }
         binding.messageCustomerButton.setOnClickListener {
-            messageToCustomer(customer)
+            Customer.messageToCustomer(customer, this)
         }
 
-    }
-
-    private fun messageToCustomer(customer: CustomerInfo) {
-        val messageIntent = Intent(Intent.ACTION_VIEW)
-        messageIntent.type = "vnd.android-dir/mms-sms"
-        messageIntent.putExtra("address", customer.telephone)
-        startActivity(messageIntent)
-    }
-
-    private fun callToCustomer(customer: CustomerInfo) {
-        val dialIntent = Intent(Intent.ACTION_DIAL)
-        dialIntent.data = Uri.parse("tel:" + customer.telephone)
-        startActivity(dialIntent)
     }
 
     fun setAutoCompletedInfo() {
-        val customersNameList = getCustomersNameList()
+        val customersNameList = Customer.getCustomersNameList()
         val adapter =
-            ArrayAdapter(applicationContext, R.layout.simple_list_item_1, customersNameList)
+            ArrayAdapter(applicationContext, layout.simple_list_item_1, customersNameList)
         binding.customersListAutoComplete.setAdapter(adapter)
 
         binding.customersListAutoComplete.doAfterTextChanged {
@@ -92,18 +74,4 @@ class CustomersListActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun getCustomersNameList(): ArrayList<String> {
-
-        val customersNameList: ArrayList<String> = ArrayList()
-
-        MainActivity.customersList.forEach {
-            customersNameList.add("${it.telephone} ${it.name} ${it.surname}")
-        }
-
-        return customersNameList
-    }
-
-
-
 }

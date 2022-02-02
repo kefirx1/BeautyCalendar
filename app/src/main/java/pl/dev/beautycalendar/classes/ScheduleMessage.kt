@@ -9,8 +9,6 @@ import pl.dev.beautycalendar.receiver.MessageReceiver
 
 class ScheduleMessage {
 
-    private val dateOfVisits = DateOfVisits()
-
     fun setScheduleMessage(
         applicationContext: Context,
         instance: Activity,
@@ -32,7 +30,7 @@ class ScheduleMessage {
         )
         val alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val dayBeforeVisitMillis = dateOfVisits.getDayBeforeMillis(dateTimeOfVisitMill)
+        val dayBeforeVisitMillis = DateOfVisits.getDayBeforeMillis(dateTimeOfVisitMill)
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
