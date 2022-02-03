@@ -10,6 +10,7 @@ import androidx.core.widget.doAfterTextChanged
 import pl.dev.beautycalendar.classes.*
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
+import pl.dev.beautycalendar.database.FirebaseData
 import pl.dev.beautycalendar.databinding.ActivityOldCustomerBinding
 
 class OldCustomerActivity : AppCompatActivity() {

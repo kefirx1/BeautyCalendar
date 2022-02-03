@@ -1,4 +1,4 @@
-package pl.dev.beautycalendar.classes
+package pl.dev.beautycalendar.database
 
 import android.app.Activity
 import android.util.Log

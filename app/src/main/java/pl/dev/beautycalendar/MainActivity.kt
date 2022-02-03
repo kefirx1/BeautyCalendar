@@ -5,26 +5,33 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
 import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
-import pl.dev.beautycalendar.classes.FirebaseData
+import pl.dev.beautycalendar.classes.DeviceInfo
 import pl.dev.beautycalendar.data.CustomerInfo
+import pl.dev.beautycalendar.database.FirebaseData
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
+import pl.dev.beautycalendar.json.GetJSONString
+import pl.dev.beautycalendar.viewModel.BCViewModel
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-
     companion object {
         var userName = ""
         val customersList: ArrayList<CustomerInfo> = ArrayList()
         val database = FirebaseDatabase.getInstance()
         var reference = database.getReference(userName)
+        var isOnline = true
+        lateinit var bcDatabaseJSON: CustomerInfo
+        lateinit var viewModel: BCViewModel
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -32,23 +39,35 @@ class MainActivity : AppCompatActivity() {
 
     private val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
     private val events: ArrayList<EventDay> = ArrayList()
+    private val bcDatabaseJSONPath = "bcDatabase.json"
+    private val gson = Gson()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         firebaseData = FirebaseData()
-
         setUserName()
-
     }
 
     override fun onResume() {
         super.onResume()
+
+        isOnline = DeviceInfo.isDeviceOnline(applicationContext)
+        bcDatabaseJSON = gson.fromJson(
+            GetJSONString.getJsonStringFromAssets(
+                applicationContext,
+                bcDatabaseJSONPath
+            ), CustomerInfo::class.java
+        )
+
+        viewModel = ViewModelProvider
+            .AndroidViewModelFactory
+            .getInstance(application)
+            .create(BCViewModel::class.java)
 
         Log.d("TAG", "On resume")
 

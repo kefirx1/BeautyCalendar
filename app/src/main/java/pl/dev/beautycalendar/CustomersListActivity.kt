@@ -10,7 +10,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.dev.beautycalendar.adapter.InfoListAdapter
 import pl.dev.beautycalendar.classes.Customer
-import pl.dev.beautycalendar.classes.FirebaseData
+import pl.dev.beautycalendar.database.FirebaseData
 import pl.dev.beautycalendar.databinding.ActivityCustomersListBinding
 
 class CustomersListActivity : AppCompatActivity() {
