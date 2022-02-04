@@ -2,14 +2,12 @@ package pl.dev.beautycalendar.database
 
 import android.app.Activity
 import android.util.Log
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import pl.dev.beautycalendar.CustomersListActivity
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.OldCustomerActivity
-import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.data.VisitsDate
-import java.util.ArrayList
-import java.util.HashMap
 
 class FirebaseData {
 
@@ -24,50 +22,13 @@ class FirebaseData {
 
     }
 
-    private fun getFirebaseData(snapshot: DataSnapshot) {
-        Log.e("TAG", "Check")
-        MainActivity.customersList.clear()
-        snapshot.children.forEach { customer ->
-
-            val listOfItems: ArrayList<Any> = ArrayList()
-
-            customer.children.forEach {
-                listOfItems.add(it.value!!)
-            }
-
-            val singleVisitsDate: ArrayList<VisitsDate> = ArrayList()
-
-            val visitsDateRow = listOfItems[1] as ArrayList<*>
-
-            visitsDateRow.forEach {
-                val visitsDateRowMap = it as HashMap<*, *>
-                val date = visitsDateRowMap["date"] as Long
-                val service = visitsDateRowMap["service"] as String
-                val visitsDate = VisitsDate(date, service)
-                singleVisitsDate.add(visitsDate)
-            }
-
-            val singleCustomer = CustomerInfo(
-                listOfItems[0].toString().toInt(),
-                singleVisitsDate,
-                listOfItems[2] as String,
-                listOfItems[3] as String,
-                listOfItems[4] as String,
-            )
-
-            MainActivity.customersList.add(singleCustomer)
-        }
-    }
-
-
-
     private fun doForMainActivity(instance: MainActivity) {
 
         MainActivity.reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 instance.clearEvents()
-                getFirebaseData(snapshot)
+                MainActivity.viewModel.setCustomerList(snapshot)
                 instance.setViewPager()
                 instance.setCalendar()
 
@@ -85,7 +46,7 @@ class FirebaseData {
         MainActivity.reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                getFirebaseData(snapshot)
+                MainActivity.viewModel.setCustomerList(snapshot)
                 instance.setAutoCompletedInfo()
 
             }
@@ -101,7 +62,7 @@ class FirebaseData {
         MainActivity.reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                getFirebaseData(snapshot)
+                MainActivity.viewModel.setCustomerList(snapshot)
                 instance.setAutoCompletedInfo()
 
             }

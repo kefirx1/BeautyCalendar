@@ -1,8 +1,8 @@
 package pl.dev.beautycalendar.viewModel
 
-import android.app.Activity
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import com.google.firebase.database.DataSnapshot
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.database.BCRepository
 
@@ -13,8 +13,8 @@ class BCViewModel(application: Application): AndroidViewModel(application) {
     fun insertNewVisit(customerInfo: CustomerInfo){
 
     }
-    fun setCustomerList(instance: Activity){
-        bcRepository.setCustomersList(instance)
+    fun setCustomerList(snapshot: DataSnapshot){
+        bcRepository.setCustomersList(snapshot)
     }
 
 }

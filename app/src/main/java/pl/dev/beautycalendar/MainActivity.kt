@@ -9,14 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.applandeo.materialcalendarview.EventDay
 import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.Gson
 import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.classes.DeviceInfo
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.database.FirebaseData
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
-import pl.dev.beautycalendar.json.GetJSONString
 import pl.dev.beautycalendar.viewModel.BCViewModel
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -30,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         var reference = database.getReference(userName)
         var isOnline = true
-        lateinit var bcDatabaseJSON: CustomerInfo
         lateinit var viewModel: BCViewModel
     }
 
@@ -39,8 +36,6 @@ class MainActivity : AppCompatActivity() {
 
     private val customerToEvent: HashMap<EventDay, CustomerInfo> = HashMap()
     private val events: ArrayList<EventDay> = ArrayList()
-    private val bcDatabaseJSONPath = "bcDatabase.json"
-    private val gson = Gson()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +52,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         isOnline = DeviceInfo.isDeviceOnline(applicationContext)
-        bcDatabaseJSON = gson.fromJson(
-            GetJSONString.getJsonStringFromAssets(
-                applicationContext,
-                bcDatabaseJSONPath
-            ), CustomerInfo::class.java
-        )
 
         viewModel = ViewModelProvider
             .AndroidViewModelFactory
