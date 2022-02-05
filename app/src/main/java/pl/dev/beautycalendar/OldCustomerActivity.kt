@@ -33,6 +33,7 @@ class OldCustomerActivity : AppCompatActivity() {
 
         scheduleMessage = ScheduleMessage()
         firebaseData = FirebaseData()
+        newVisit = NewVisit()
 
         firebaseData.getListOfVisits(this)
 

@@ -16,7 +16,7 @@ class NewVisit {
 
     fun addNewVisit(customer: CustomerInfo, instance: Activity, applicationContext: Context) {
 
-        MainActivity.reference.child(customer.telephone).setValue(customer)
+        MainActivity.viewModel.insertNewVisit(customer)
 
         Toast.makeText(applicationContext, "Dodano wizytę", Toast.LENGTH_SHORT).show()
 

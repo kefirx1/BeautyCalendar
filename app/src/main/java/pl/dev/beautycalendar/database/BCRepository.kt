@@ -8,6 +8,9 @@ import pl.dev.beautycalendar.data.VisitsDate
 
 class BCRepository() {
 
+    fun insertCustomer(customerInfo: CustomerInfo){
+        MainActivity.reference.child(customerInfo.telephone).setValue(customerInfo)
+    }
 
     fun setCustomersList(snapshot: DataSnapshot){
         Log.e("TAG", "Check")
