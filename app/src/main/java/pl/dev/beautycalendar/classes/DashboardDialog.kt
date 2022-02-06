@@ -72,7 +72,8 @@ class DashboardDialog(private val visitsList: ArrayList<CustomerInfo>, private v
 
         customer.active = 0
 
-        MainActivity.reference.child(customer.telephone).setValue(customer)
+        MainActivity.viewModel.cancelVisit(customer)
+
         holder.modal.visibility = View.GONE
     }
 

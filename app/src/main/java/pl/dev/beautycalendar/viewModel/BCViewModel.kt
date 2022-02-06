@@ -11,6 +11,10 @@ class BCViewModel(application: Application): AndroidViewModel(application) {
 
     private var bcRepository = BCRepository()
 
+    fun cancelVisit(customerInfo: CustomerInfo){
+        bcRepository.cancelVisit(customerInfo)
+    }
+
     fun insertNewVisit(customerInfo: CustomerInfo){
         bcRepository.insertCustomer(customerInfo)
     }

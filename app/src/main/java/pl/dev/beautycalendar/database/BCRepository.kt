@@ -1,12 +1,24 @@
 package pl.dev.beautycalendar.database
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import pl.dev.beautycalendar.MainActivity
+import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.data.VisitsDate
+import pl.dev.beautycalendar.receiver.MessageReceiver
 
 class BCRepository() {
+
+    fun cancelVisit(customerInfo: CustomerInfo) {
+        MainActivity.reference.child(customerInfo.telephone).setValue(customerInfo)
+    }
 
     fun insertCustomer(customerInfo: CustomerInfo){
         MainActivity.reference.child(customerInfo.telephone).setValue(customerInfo)

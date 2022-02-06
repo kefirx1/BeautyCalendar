@@ -13,7 +13,7 @@ import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.classes.DeviceInfo
 import pl.dev.beautycalendar.data.CustomerInfo
-import pl.dev.beautycalendar.database.FirebaseData
+import pl.dev.beautycalendar.classes.FirebaseData
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import pl.dev.beautycalendar.viewModel.BCViewModel
 import java.time.LocalDateTime
