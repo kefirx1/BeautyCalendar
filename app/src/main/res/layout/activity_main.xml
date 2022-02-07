@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/fuchsia"
             android:textSize="40sp"
-            android:text="NOWA KLIENTKA"
+            android:text="@string/newCustomerText"
             android:paddingTop="20dp"
             android:paddingBottom="20dp">
         </TextView>
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/fuchsia"
             android:textSize="40sp"
-            android:text="STARA KLIENTKA"
+            android:text="@string/oldCustomerText"
             android:paddingTop="20dp"
             android:paddingBottom="40dp">
         </TextView>
@@ -197,13 +197,13 @@
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_marginEnd="30dp"
-            android:text="ZMIANA"/>
+            android:text="@string/changeText"/>
 
         <Button
             android:id="@+id/customersListButton"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:text="KLIENTKI" />
+            android:text="@string/clientsText" />
 
     </LinearLayout>
 

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="150dp"
-    android:padding="10dp"
-    >
+    android:padding="10dp">
 
     <Button
         android:id="@+id/callEventButton"
@@ -15,7 +13,7 @@
 
         android:layout_marginTop="5dp"
         android:padding="5dp"
-        android:text="ZADZWOŃ"
+        android:text="@string/callUppercaseText"
 
         app:layout_constraintBottom_toTopOf="@+id/cancelEventButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +30,7 @@
         android:layout_marginStart="10dp"
         android:background="@drawable/spinner"
         android:padding="5dp"
-        android:text="WIADOMOŚĆ"
+        android:text="@string/messageText"
         app:layout_constraintBottom_toTopOf="@+id/cancelEventButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -47,7 +45,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/spinner"
         android:padding="5dp"
-        android:text="ODWOŁAJ WIZYTĘ"
+        android:text="@string/cancelVisitText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

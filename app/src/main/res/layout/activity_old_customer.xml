@@ -13,7 +13,7 @@
             android:layout_marginTop="10dp"
             android:labelFor="@id/nameEditText"
             android:letterSpacing="0.2"
-            android:text="KLIENTKA"
+            android:text="@string/clientText"
             android:textColor="@color/fuchsia"
             android:textSize="15sp" />
 
@@ -39,7 +39,7 @@
             android:layout_marginTop="20dp"
             android:labelFor="@id/serviceEditText"
             android:letterSpacing="0.2"
-            android:text="USŁUGA"
+            android:text="@string/serviceText"
             android:textColor="@color/fuchsia"
             android:textSize="15sp" />
 
@@ -88,7 +88,7 @@
             android:id="@+id/addOldCustomerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DODAJ"
+            android:text="@string/addText"
             android:textColor="@color/fuchsia"
             android:textSize="30sp" />
 

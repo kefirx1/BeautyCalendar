@@ -50,6 +50,9 @@ dependencies {
     implementation 'me.relex:circleindicator:2.1.4'
 
 
+    //database driver
+    implementation 'mysql:mysql-connector-java:8.0.28'
+
     //Kotlin
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.0"

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +15,7 @@
             android:textSize="15sp"
             android:textColor="@color/fuchsia"
             android:letterSpacing="0.2"
-            android:text="IMIĘ"/>
+            android:text="@string/nameText"/>
 
         <EditText
             android:id="@+id/nameEditText"
@@ -43,7 +42,7 @@
             android:textSize="15sp"
             android:textColor="@color/fuchsia"
             android:letterSpacing="0.2"
-            android:text="NAZWISKO"/>
+            android:text="@string/surnameText"/>
 
         <EditText
             android:id="@+id/surnameEditText"
@@ -70,7 +69,7 @@
             android:textSize="15sp"
             android:textColor="@color/fuchsia"
             android:letterSpacing="0.2"
-            android:text="NUMER"/>
+            android:text="@string/telephoneNumberText"/>
 
         <EditText
             android:id="@+id/telephoneEditText"
@@ -97,7 +96,7 @@
             android:textSize="15sp"
             android:textColor="@color/fuchsia"
             android:letterSpacing="0.2"
-            android:text="USŁUGA"/>
+            android:text="@string/serviceText"/>
 
         <EditText
             android:id="@+id/serviceEditText"
@@ -144,7 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-20dp"
-            android:text="DODAJ"
+            android:text="@string/addText"
             android:textColor="@color/fuchsia"
             android:textSize="30sp" />
 

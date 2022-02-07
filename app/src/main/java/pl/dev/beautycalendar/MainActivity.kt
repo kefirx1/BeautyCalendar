@@ -16,6 +16,10 @@ import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.classes.FirebaseData
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import pl.dev.beautycalendar.viewModel.BCViewModel
+import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.SQLException
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -46,6 +50,37 @@ class MainActivity : AppCompatActivity() {
 
         firebaseData = FirebaseData()
         setUserName()
+
+        var driver="com.mysql.cj.jdbc.Driver"
+        var url="jdbc:mysql://mysql.ct8.pl:3306/m25103_beautyCalendar"
+        var user="m25103_root"
+        var psd="Baziucha12345@"
+        try {
+            Class.forName(driver).newInstance()
+            println("Connected successfully 1")
+        }catch (e:Exception){
+            e.printStackTrace()
+            println("Connection failed")
+        }
+
+        try{
+            val conn=DriverManager.getConnection(url,user,psd)
+            var sql:String="insert into stuinfo(id,name)values(?,?)"
+            val ps: PreparedStatement =conn.prepareStatement(sql)
+            ps.setString(1,"3")
+            ps.setString(2,"vocus")
+            ps.execute()
+
+
+        }catch (e:Exception) {
+            e.printStackTrace()
+            println("Connection failed 2")
+        }
+
+
+
+
+
     }
 
     override fun onResume() {

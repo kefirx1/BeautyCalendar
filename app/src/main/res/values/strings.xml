@@ -26,4 +26,29 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addnewbutton">addNewButton</string>
 
+    <!--    activity_customers_list-->
+    <string name="clientText">KLIENTKA</string>
+    <string name="callUppercaseText">ZADZWOŃ</string>
+    <string name="messageText">WIADOMOŚĆ</string>
+
+    <!--    activity_login-->
+    <string name="beautician1Text">MONIKA</string>
+    <string name="beautician2Text">AGATA</string>
+
+    <!--    activity_main-->
+    <string name="newCustomerText">NOWA KLIENTKA</string>
+    <string name="oldCustomerText">STARA KLIENTKA</string>
+    <string name="changeText">ZMIANA</string>
+    <string name="clientsText">KLIENTKI</string>
+
+    <!--    activity_new_customer-->
+    <string name="nameText">IMIĘ</string>
+    <string name="surnameText">NAZWISKO</string>
+    <string name="telephoneNumberText">NUMER</string>
+    <string name="serviceText">USŁUGA</string>
+    <string name="addText">DODAJ</string>
+
+    <!--    events_long_dialog-->
+    <string name="cancelVisitText">ODWOŁAJ WIZYTĘ</string>
+
 </resources>
