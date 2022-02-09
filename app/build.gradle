@@ -59,6 +59,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.4.0"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.4.0"
 
+    //Awesome font
     implementation 'info.androidhive:fontawesome:0.0.5'
 
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
