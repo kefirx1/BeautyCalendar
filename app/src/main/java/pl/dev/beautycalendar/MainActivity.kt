@@ -12,14 +12,10 @@ import com.google.firebase.database.FirebaseDatabase
 import pl.dev.beautycalendar.adapter.EventsAdapter
 import pl.dev.beautycalendar.adapter.ViewPagerUpcomingAdapter
 import pl.dev.beautycalendar.classes.DeviceInfo
-import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.classes.FirebaseData
+import pl.dev.beautycalendar.data.CustomerInfo
 import pl.dev.beautycalendar.databinding.ActivityMainBinding
 import pl.dev.beautycalendar.viewModel.BCViewModel
-import java.sql.DriverManager
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.sql.SQLException
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -50,12 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         firebaseData = FirebaseData()
         setUserName()
-
-
-
-
-
-
 
     }
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -20,7 +22,7 @@
         <activity
             android:name=".OldCustomerActivity"
             android:exported="false"
-            android:screenOrientation="nosensor"></activity>
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".NewCustomerActivity"
             android:exported="false"
