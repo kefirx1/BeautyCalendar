@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.dev.beautycalendar.R
-import pl.dev.beautycalendar.classes.DateOfVisits
+import pl.dev.beautycalendar.classes.DateTimeConverter
 import pl.dev.beautycalendar.data.CustomerInfo
 
 class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>): RecyclerView.Adapter<ViewPagerUpcomingAdapter.Pager2ViewHandler>() {
@@ -45,7 +45,7 @@ class ViewPagerUpcomingAdapter(private val visitsList: ArrayList<CustomerInfo>):
         holder.nameTextView.text = visitsList[position].name + " " + visitsList[position].surname
         holder.telephoneTextView.text = visitsList[position].telephone
         holder.serviceTextView.text =
-            DateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
+            DateTimeConverter.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
     }
 
 }

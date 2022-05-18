@@ -17,12 +17,16 @@ class MessageReceiver: BroadcastReceiver() {
         val phoneNumber = intent.getStringExtra(PHONE_EXTRA)!!
         val textMessage = intent.getStringExtra(MESSAGE_EXTRA)!!
 
-        sendMessage(phoneNumber, textMessage)
+        sendMessage(
+            phoneNumber = phoneNumber,
+            textMessage = textMessage,
+            context = context
+        )
 
     }
 
-    private fun sendMessage(phoneNumber: String, textMessage: String) {
-        val smsManager = SmsManager.getDefault()
+    private fun sendMessage(phoneNumber: String, textMessage: String, context: Context) {
+        val smsManager = context.getSystemService(SmsManager::class.java)
         smsManager.sendTextMessage(phoneNumber, null, textMessage, null, null)
     }
 

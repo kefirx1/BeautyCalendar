@@ -4,7 +4,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import pl.dev.beautycalendar.classes.DateOfVisits
+import pl.dev.beautycalendar.classes.DateTimeConverter
 import pl.dev.beautycalendar.classes.NewVisit
 import pl.dev.beautycalendar.classes.ScheduleMessage
 import pl.dev.beautycalendar.data.CustomerInfo
@@ -48,7 +48,7 @@ class NewCustomerActivity : AppCompatActivity() {
             val telephone = binding.telephoneEditText.text.toString()
             val service = binding.serviceEditText.text.toString()
 
-            val dateOfVisit = DateOfVisits.getDateOfVisitMillis(
+            val dateOfVisit = DateTimeConverter.getDateOfVisitMillis(
                 binding.newCustomerDatePicker,
                 binding.newCustomerTimePicker
             )

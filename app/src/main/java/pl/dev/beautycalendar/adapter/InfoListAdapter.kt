@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.dev.beautycalendar.R
-import pl.dev.beautycalendar.classes.DateOfVisits
+import pl.dev.beautycalendar.classes.DateTimeConverter
 import pl.dev.beautycalendar.data.VisitsDate
 
 class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerView.Adapter<InfoListAdapter.ViewHandler>() {
@@ -41,7 +41,7 @@ class InfoListAdapter(private val visitsList: ArrayList<VisitsDate>): RecyclerVi
     @SuppressLint("SetTextI18n")
     private fun setVisitsDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            DateOfVisits.getStringTimeDate(visitsList[position].date)
+            DateTimeConverter.getStringTimeDate(visitsList[position].date)
         holder.serviceTextView.text =
             visitsList[position].service
     }

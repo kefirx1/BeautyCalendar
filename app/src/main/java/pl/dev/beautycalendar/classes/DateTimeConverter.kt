@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
-object DateOfVisits {
+object DateTimeConverter {
 
     fun getDayBeforeMillis(dateTimeOfVisitMill: Long): Long {
         val dateTimeOfVisit = LocalDateTime.ofInstant(
@@ -61,11 +61,17 @@ object DateOfVisits {
             ZoneId.systemDefault()
         )
         val year = dateTimeOfVisit.year
-        val month = dateTimeOfVisit.monthValue
-        val day = dateTimeOfVisit.dayOfMonth
+        var month = dateTimeOfVisit.monthValue.toString()
+        var day = dateTimeOfVisit.dayOfMonth.toString()
         val hour = dateTimeOfVisit.hour
         var minute = dateTimeOfVisit.minute.toString()
 
+        if(month.length==1){
+            month = "0$month"
+        }
+        if(day.length==1){
+            day = "0$day"
+        }
         if (dateTimeOfVisit.minute < 10) {
             minute = "0$minute"
         }

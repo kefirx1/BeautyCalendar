@@ -11,7 +11,7 @@ class MakeMessage {
 
         val dateTimeOfVisitMillis = customerInfo.dateOf[customerInfo.dateOf.size - 1].date
 
-        val stringDate = DateOfVisits.getStringDateTime(dateTimeOfVisitMillis)
+        val stringDate = DateTimeConverter.getStringDateTime(dateTimeOfVisitMillis)
 
         return basicMessage + stringDate
     }

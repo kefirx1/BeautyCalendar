@@ -30,7 +30,7 @@ class ScheduleMessage {
         )
         val alarmManager = instance.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val dayBeforeVisitMillis = DateOfVisits.getDayBeforeMillis(dateTimeOfVisitMill)
+        val dayBeforeVisitMillis = DateTimeConverter.getDayBeforeMillis(dateTimeOfVisitMill)
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,

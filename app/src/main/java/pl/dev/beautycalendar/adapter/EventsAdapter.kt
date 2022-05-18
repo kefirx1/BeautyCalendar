@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.dev.beautycalendar.MainActivity
 import pl.dev.beautycalendar.R
 import pl.dev.beautycalendar.classes.DashboardDialog
-import pl.dev.beautycalendar.classes.DateOfVisits
+import pl.dev.beautycalendar.classes.DateTimeConverter
 import pl.dev.beautycalendar.data.CustomerInfo
 
 class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, applicationContext: Context, private val instance: MainActivity): RecyclerView.Adapter<EventsAdapter.ViewHandler>() {
@@ -61,7 +61,7 @@ class EventsAdapter(private val visitsList: ArrayList<CustomerInfo>, application
     @SuppressLint("SetTextI18n")
     private fun setExamDetails(holder: ViewHandler, position: Int) {
         holder.dateTextView.text =
-            DateOfVisits.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
+            DateTimeConverter.getStringTime(visitsList[position].dateOf[visitsList[position].dateOf.size - 1].date) + " - " + visitsList[position].dateOf[visitsList[position].dateOf.size - 1].service
         holder.nameTextView.text =
             visitsList[position].name + " " + visitsList[position].surname
     }

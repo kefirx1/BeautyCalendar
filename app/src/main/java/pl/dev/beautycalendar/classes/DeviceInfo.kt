@@ -18,9 +18,6 @@ object DeviceInfo {
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
                     return true
                 }
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                    return true
-                }
             }
         }
         return false

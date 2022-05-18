@@ -56,7 +56,7 @@ class OldCustomerActivity : AppCompatActivity() {
                 }
             }
 
-            val dateOfVisit = DateOfVisits.getDateOfVisitMillis(
+            val dateOfVisit = DateTimeConverter.getDateOfVisitMillis(
                 binding.oldCustomerDatePicker,
                 binding.oldCustomerTimePicker
             )
